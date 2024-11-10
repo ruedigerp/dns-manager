@@ -24,11 +24,11 @@ var getRecordCmd = &cobra.Command{
 
 		} else {
 			dnsapi.GetRecordId(zoneID, token, domain)
-			resp, recordID, err := dnsapi.GetRecordId(zoneID, token, domain)
+			resp, recordID, _ := dnsapi.GetRecordId(zoneID, token, domain)
 			if resp {
 				fmt.Printf("RecordID: %s\n", recordID)
 			} else {
-				fmt.Printf("Fehler beim abrufen des Records: %v\n", err)
+				fmt.Printf("Record not found\n")
 			}
 		}
 
