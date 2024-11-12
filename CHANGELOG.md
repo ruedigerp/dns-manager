@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.2](https://github.com/ruedigerp/cloudflare-dns-manager/compare/v1.0.1...v1.0.2) (2024-11-12)
+
+
+### Bug Fixes
+
+* actions ([89c2417](https://github.com/ruedigerp/cloudflare-dns-manager/commit/89c24174e384de8b6b64fc1117cf609ad0bf42d2))
+
 ### [1.0.1](https://github.com/ruedigerp/cloudflare-dns-manager/compare/v1.0.1-dev.0...v1.0.1) (2024-11-12)
 
 
