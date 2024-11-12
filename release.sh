@@ -13,7 +13,7 @@ SHA256_WIN_AMD64=$(shasum -a 256 builds/$BINARY_NAME-$VERSION-windows-amd64 | aw
 WIN_AMD64="$BINARY_NAME-$VERSION-windows-amd64"
 
 # Generate formula from template with replacements
-cat <<EOF > dns-manager.rb
+cat <<EOF > dnsM-manager.rb
 class Dnsmanager < Formula
   desc "dns-manager!"
   homepage "https://www.kuepper.nrw"
@@ -94,7 +94,7 @@ cat <<EOF > dns-manager.json
     "homepage": "https://kuepper.nrw",
     "bin": "dns-manager",
     "pre_install": "Rename-Item \"\$dir\\\\$WIN_AMD64\" dns-manager",
-    "description": "mogenius cli!",
+    "description": "Dnsmanager!",
     "architecture": {
         "64bit": {
             "url": "https://github.com/ruedigerp/cloudflare-dns-manager/releases/download/$VERSION/dns-manager-$VERSION-windows-amd64",

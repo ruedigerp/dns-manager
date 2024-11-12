@@ -24,6 +24,8 @@ var deleteRecordCmd = &cobra.Command{
 
 		} else {
 			if serviceprovider == "cloudflare" {
+				zoneID := dnsconfig.Cloudflare.ZoneId
+				token := dnsconfig.Cloudflare.Token
 				resp, recordID, _ := dnsapi.GetRecordId(zoneID, token, domain)
 				if resp {
 					fmt.Printf("RecordID: %s\n", recordID)
