@@ -34,6 +34,18 @@ var deleteRecordCmd = &cobra.Command{
 					return
 				}
 			} else if serviceprovider == "bind" {
+				if zone == "" {
+					fmt.Printf("Please provide zone. (--zone|-z example.com)\n")
+					return
+				}
+				if ip == "" {
+					fmt.Printf("Please provide ip address. (--ip|-i 123.123.123.123)\n")
+					return
+				}
+				if rtype == "" {
+					fmt.Printf("Please provide zone. (--rytpe|-r (A|MX|TXT|...))\n")
+					return
+				}
 				dnsapi.BindDeleteRecord(dnsconfig.Bind.Server, dnsconfig.Bind.Keyname, dnsconfig.Bind.Hmackey, zone, domain, ip, rtype)
 			}
 		}

@@ -8,10 +8,10 @@ import (
 	"github.com/miekg/dns"
 )
 
-func BindInsertRecord(server string, keyName string, keySecret string, zone string, recordName string, ipAddress string) {
+func BindInsertRecord(server string, keyName string, keySecret string, zone string, recordName string, ipAddress string, rtype string) {
 	msg := new(dns.Msg)
 	msg.SetUpdate(zone + ".")
-	rr, err := dns.NewRR(fmt.Sprintf("%s. 3600 IN A %s", recordName, ipAddress))
+	rr, err := dns.NewRR(fmt.Sprintf("%s. 3600 IN %s %s", recordName, rtype, ipAddress))
 	if err != nil {
 		log.Fatalf("Fehler beim Erstellen des Records: %v", err)
 	}
