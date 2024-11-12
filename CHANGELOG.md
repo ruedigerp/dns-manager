@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.4](https://github.com/ruedigerp/cloudflare-dns-manager/compare/v1.0.3...v1.0.4) (2024-11-12)
+
+
+### Bug Fixes
+
+* remove windows  package ([1878a49](https://github.com/ruedigerp/cloudflare-dns-manager/commit/1878a496649f59762221e764ce96d7740a9d883f))
+
 ### [1.0.3](https://github.com/ruedigerp/cloudflare-dns-manager/compare/v1.0.2...v1.0.3) (2024-11-12)
 
 
