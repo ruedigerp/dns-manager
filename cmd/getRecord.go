@@ -14,19 +14,17 @@ var getRecordCmd = &cobra.Command{
 	ValidArgs: []string{"--domain", "-d"},
 	Run: func(cmd *cobra.Command, args []string) {
 		domain, _ := cmd.Flags().GetString("domain")
-		configPath, _ := cmd.Flags().GetString("config")
-
-		zoneID, token = dnsapi.GetConfig(configPath)
-
-		// fmt.Printf("ZonenID: %s, Token: %s\n", zoneID, token)
 		if domain == "" {
 			fmt.Printf("No domain/subdomain user -d|--domain test.domain.tld")
 
 		} else {
-			dnsapi.GetRecordId(zoneID, token, domain)
-			resp, recordID, _ := dnsapi.GetRecordId(zoneID, token, domain)
+			zoneID := dnsconfig.Cloudflare.ZoneId
+			token := dnsconfig.Cloudflare.Token
+			dnsapi.GetRecord(zoneID, token, domain)
+			resp, recordID, msg, _ := dnsapi.GetRecord(zoneID, token, domain)
 			if resp {
 				fmt.Printf("RecordID: %s\n", recordID)
+				fmt.Printf("%s\n", msg)
 			} else {
 				fmt.Printf("Record not found\n")
 			}

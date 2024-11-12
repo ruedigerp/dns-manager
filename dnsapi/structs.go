@@ -5,7 +5,11 @@ type Response struct {
 }
 
 type Record struct {
-	ID string `json:"id"`
+	ID      string `json:"id"`
+	Type    string `json:"type"`
+	Content string `json:"content"`
+	Name    string `json:"name"`
+	Proxied bool   `json:"proxied"`
 }
 
 type DNSRecord struct {
@@ -26,4 +30,17 @@ type Config struct {
 		Password string `yaml:"password"`
 		Name     string `yaml:"name"`
 	} `yaml:"database"`
+	Bind struct {
+		Server  string `yaml:"server"`
+		Keyname string `yaml:"keyname"`
+		Hmackey string `yaml:"hmackey"`
+	} `yaml:"bind"`
+	Batch struct {
+		Command  string   `yaml:"command"`
+		Provider string   `yaml:"provider"`
+		Zone     string   `yaml:"zone"`
+		IP       string   `yaml:"ip"`
+		Proxied  string   `yaml:"proxied"`
+		Domains  []string `yaml:"domains"`
+	}
 }
