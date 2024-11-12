@@ -7,8 +7,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var zoneID = ""
-var token = ""
+// var zoneID = ""
+// var token = ""
 var defaultConfig = "./config.yaml"
 
 var dnsconfig dnsapi.Config
