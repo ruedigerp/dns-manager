@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.12](https://github.com/ruedigerp/dns-manager/compare/v1.0.11...v1.0.12) (2024-11-12)
+
+
+### Bug Fixes
+
+* change class name in homebrew formular ([460e6c4](https://github.com/ruedigerp/dns-manager/commit/460e6c492905904488a5faf6a2902090ad447c8a))
+
 ### [1.0.11](https://github.com/ruedigerp/dns-manager/compare/v1.0.10...v1.0.11) (2024-11-12)
 
 
