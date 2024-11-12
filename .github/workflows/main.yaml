@@ -45,6 +45,19 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.MO_CLI_TOKEN }}
 
+      - name: Initialize Go dependencies
+        run: go mod tidy
+          
+      - name: Cache Go modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
       - name: Execute make all
         run: make all
 
