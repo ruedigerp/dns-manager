@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.13](https://github.com/ruedigerp/dns-manager/compare/v1.0.12...v1.0.13) (2024-11-12)
+
+
+### Bug Fixes
+
+* add batch mode für bind dns Zonen ([73f32f1](https://github.com/ruedigerp/dns-manager/commit/73f32f181e5b5f5708cf45e8b390a8f89672b29b))
+
 ### [1.0.12](https://github.com/ruedigerp/dns-manager/compare/v1.0.11...v1.0.12) (2024-11-12)
 
 
