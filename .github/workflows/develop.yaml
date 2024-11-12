@@ -41,7 +41,7 @@ jobs:
       - name: Create release in another repo
         run: |
           echo "Creating release ${VERSION}"
-          gh release create refs/tags/${VERSION} --title "Release ${VERSION}" --repo mogenius/homebrew-mocli-dev
+          gh release create refs/tags/${VERSION} --title "Release ${VERSION}" --repo ruedigerp/cloudflare-dns-manager
         env:
           GH_TOKEN: ${{ secrets.MO_CLI_TOKEN }}
 
@@ -59,9 +59,9 @@ jobs:
         run: |
           ls -lisa builds
           for tarball in builds/*.tar.gz; do
-            gh release upload "${{ env.VERSION }}" "$tarball" --repo ruedigerp/cloudflare-dns-manager-homebrew
+            gh release upload "${{ env.VERSION }}" "$tarball" --repo ruedigerp/cloudflare-dns-manager-homebrew-dev
           done
-          gh release upload "${{ env.VERSION }}" "builds/mocli-dev-${{ env.VERSION }}-windows-amd64" --repo ruedigerp/cloudflare-dns-manager-homebrew
+          gh release upload "${{ env.VERSION }}" "builds/mocli-dev-${{ env.VERSION }}-windows-amd64" --repo ruedigerp/cloudflare-dns-manager
         env:
           GH_TOKEN: ${{ secrets.MO_CLI_TOKEN }}
 
@@ -71,7 +71,7 @@ jobs:
           git config --global user.email "ruediger@pretzlaff.info"
           git config --global user.name "ruedigerp"
           git config --global credential.helper cache
-          git clone https://${{secrets.MO_CLI_TOKEN}}@github.com/ruedigerp/cloudflare-dns-manager-homebrew
+          git clone https://${{secrets.MO_CLI_TOKEN}}@github.com/ruedigerp/cloudflare-dns-manager-homebrew-dev
           cd homebrew-mocli-dev
           cp ../mocli-dev.rb .
           cp ../mocli-dev.json .
