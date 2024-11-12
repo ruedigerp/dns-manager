@@ -40,7 +40,9 @@ type Config struct {
 		Provider string   `yaml:"provider"`
 		Zone     string   `yaml:"zone"`
 		IP       string   `yaml:"ip"`
-		Proxied  string   `yaml:"proxied"`
+		Oldip    string   `yaml:"oldip"`
+		Proxied  bool     `yaml:"proxied"`
+		Rtype    string   `yaml:"rtype"`
 		Domains  []string `yaml:"domains"`
 	}
 }
