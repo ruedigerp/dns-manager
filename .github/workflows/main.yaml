@@ -60,9 +60,9 @@ jobs:
           ls -lisa builds
           for tarball in builds/*.tar.gz; do
             echo "Tarball: $tarball"
-            gh release upload "${{ env.VERSION }}" "$tarball" --repo ruedigerp/cloudflare-dns-manager
+            gh release upload "${{ env.VERSION }}" "$tarball" --repo ruedigerp/cloudflare-dns-manager-homebrew
           done
-          # gh release upload "${{ env.VERSION }}" "builds/dns-manager-${{ env.VERSION }}-windows-amd64" --repo ruedigerp/cloudflare-dns-manager
+          gh release upload "${{ env.VERSION }}" "builds/dns-manager-${{ env.VERSION }}-windows-amd64" --repo ruedigerp/cloudflare-dns-manager-homebrew
         env:
           GH_TOKEN: ${{ secrets.MO_CLI_TOKEN }}
 
