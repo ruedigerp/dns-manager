@@ -73,8 +73,8 @@ jobs:
           git config --global credential.helper cache
           git clone https://${{secrets.MO_CLI_TOKEN}}@github.com/ruedigerp/cloudflare-dns-manager-homebrew-dev
           cd cloudflare-dns-manager-homebrew-dev
-          cp ../mocli-dev.rb .
-          cp ../mocli-dev.json .
+          cp ../dns-manager-dev.rb .
+          cp ../dns-manager-dev.json .
           cp ../CHANGELOG.md .
           git add .
           git commit -m " ${{ env.VERSION }}"

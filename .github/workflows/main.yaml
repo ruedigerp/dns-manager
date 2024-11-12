@@ -76,7 +76,6 @@ jobs:
           cd cloudflare-dns-manager-homebrew
           cp ../dns-manager.rb .
           cp ../dns-manager.json .
-          cp ../dns-manager.json .
           cp ../CHANGELOG.md .
           git add .
           git commit -m " ${{ env.VERSION }}"

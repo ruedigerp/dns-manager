@@ -13,7 +13,7 @@ SHA256_WIN_AMD64=$(shasum -a 256 builds/$BINARY_NAME-$VERSION-windows-amd64 | aw
 WIN_AMD64="$BINARY_NAME-$VERSION-windows-amd64"
 
 # Generate formula from template with replacements
-cat <<EOF > dnsM-manager.rb
+cat <<EOF > dns-manager.rb
 class Dnsmanager < Formula
   desc "dns-manager!"
   homepage "https://www.kuepper.nrw"

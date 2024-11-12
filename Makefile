@@ -16,7 +16,7 @@ LDFLAGS=-s -w -extldflags= \
   -X 'dns-manager/core.Branch=$(GIT_BRANCH)' \
   -X 'dns-manager/core.BuildTimestamp=$(BUILD_TIMESTAMP)' \
   -X 'dns-manager/core.Ver=$(VERSION)' \
-  -X 'dns-manager/core.Agent=mocli' \
+  -X 'dns-manager/core.Agent=dns-manager' \
   -X 'dns-manager/core.Stage=prod'
 
 all: darwin_arm64 darwin_amd64 linux_amd64 linux_386 linux_arm64 linux_arm windows_amd64 windows_386
