@@ -14,7 +14,7 @@ WIN_AMD64="$BINARY_NAME-$VERSION-windows-amd64"
 
 # Generate formula from template with replacements
 cat <<EOF > dns-manager-dev.rb
-class Dns-manager < Formula
+class Dnsmanager < Formula
   desc "dns-manager cli! [dev]"
   homepage "https://www.kuepper.nrw"
   
