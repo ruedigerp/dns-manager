@@ -26,10 +26,10 @@ class Dnsmanager < Formula
 
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/ruedigerp/cloudflare-dns-manager/releases/download/${VERSION}/dns-manager-dev-${VERSION}-darwin-arm64.tar.gz"
+      url "https://github.com/ruedigerp/homebrew-dns-manager/releases/download/${VERSION}/dns-manager-dev-${VERSION}-darwin-arm64.tar.gz"
       sha256 "$SHA256_DARWIN_ARM64"
     elsif Hardware::CPU.intel?
-      url "https://github.com/ruedigerp/cloudflare-dns-manager/releases/download/${VERSION}/dns-manager-dev-${VERSION}-darwin-amd64.tar.gz"
+      url "https://github.com/ruedigerp/homebrew-dns-manager/releases/download/${VERSION}/dns-manager-dev-${VERSION}-darwin-amd64.tar.gz"
       sha256 "$SHA256_DARWIN_AMD64"
     end
   end
@@ -37,18 +37,18 @@ class Dnsmanager < Formula
   on_linux do
     if Hardware::CPU.intel?
       if Hardware::CPU.is_64_bit?
-        url "https://github.com/ruedigerp/cloudflare-dns-manager/releases/download/${VERSION}/dns-manager-dev-${VERSION}-linux-amd64.tar.gz"
+        url "https://github.com/ruedigerp/homebrew-dns-manager/releases/download/${VERSION}/dns-manager-dev-${VERSION}-linux-amd64.tar.gz"
         sha256 "$SHA256_LINUX_AMD64"
       else
-        url "https://github.com/ruedigerp/cloudflare-dns-manager/releases/download/${VERSION}/dns-manager-dev-${VERSION}-linux-386.tar.gz"
+        url "https://github.com/ruedigerp/homebrew-dns-manager/releases/download/${VERSION}/dns-manager-dev-${VERSION}-linux-386.tar.gz"
         sha256 "$SHA256_LINUX_386"
       end
     elsif Hardware::CPU.arm?
       if Hardware::CPU.is_64_bit?
-        url "https://github.com/ruedigerp/cloudflare-dns-manager/releases/download/${VERSION}/dns-manager-dev-${VERSION}-linux-arm64.tar.gz"
+        url "https://github.com/ruedigerp/homebrew-dns-manager/releases/download/${VERSION}/dns-manager-dev-${VERSION}-linux-arm64.tar.gz"
         sha256 "$SHA256_LINUX_ARM64"
       else
-        url "https://github.com/ruedigerp/cloudflare-dns-manager/releases/download/${VERSION}/dns-manager-dev-${VERSION}-linux-arm.tar.gz"
+        url "https://github.com/ruedigerp/homebrew-dns-manager/releases/download/${VERSION}/dns-manager-dev-${VERSION}-linux-arm.tar.gz"
         sha256 "$SHA256_LINUX_ARM"
       end
     end
@@ -97,7 +97,7 @@ cat <<EOF > dns-manager-dev.json
     "description": "dns-manager cli!",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/ruedigerp/cloudflare-dns-manager/releases/download/$VERSION/dns-manager-dev-$VERSION-windows-amd64",
+            "url": "https://github.com/ruedigerp/homebrew-dns-manager/releases/download/$VERSION/dns-manager-dev-$VERSION-windows-amd64",
             "hash": "$SHA256_WIN_AMD64"
         }
     }
