@@ -61,7 +61,7 @@ jobs:
           for tarball in builds/*.tar.gz; do
             gh release upload "${{ env.VERSION }}" "$tarball" --repo ruedigerp/cloudflare-dns-manager
           done
-          gh release upload "${{ env.VERSION }}" "builds/mocli-${{ env.VERSION }}-windows-amd64" --repo ruedigerp/cloudflare-dns-manager
+          gh release upload "${{ env.VERSION }}" "builds/dns-manager-${{ env.VERSION }}-windows-amd64" --repo ruedigerp/cloudflare-dns-manager
         env:
           GH_TOKEN: ${{ secrets.MO_CLI_TOKEN }}
 
@@ -72,7 +72,7 @@ jobs:
           git config --global user.name "dns-manager"
           git config --global credential.helper cache
           git clone https://${{secrets.MO_CLI_TOKEN}}@github.com/ruedigerp/cloudflare-dns-manager-homebrew
-          cd homebrew-mocli
+          cd cloudflare-dns-manager-homebrew
           cp ../dns-manager.rb .
           cp ../dns-manager.json .
           cp ../dns-manager.json .
