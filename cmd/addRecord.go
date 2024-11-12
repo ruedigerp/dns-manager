@@ -19,6 +19,11 @@ var addRecordCmd = &cobra.Command{
 		proxied, _ := cmd.Flags().GetBool("proxied")
 		zone, _ := cmd.Flags().GetString("zone")
 		serviceprovider, _ := cmd.Flags().GetString("serviceprovider")
+		isvalid := dnsapi.IsValidIP(ip)
+		if !isvalid {
+			fmt.Printf("IP: %s is no a valid ip address\n", ip)
+			return
+		}
 		if domain == "" {
 			fmt.Printf("No domain/subdomain user -d|--domain test.domain.tld")
 
