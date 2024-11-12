@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.11](https://github.com/ruedigerp/dns-manager/compare/v1.0.10...v1.0.11) (2024-11-12)
+
+
+### Bug Fixes
+
+* rename repos ([dfe6dc9](https://github.com/ruedigerp/dns-manager/commit/dfe6dc915876311e2e17df8019839fd91c821996))
+* repo rename ([8e69124](https://github.com/ruedigerp/dns-manager/commit/8e69124adedea9e3e0ce3586b6ff631c571a9f5d))
+
 ### [1.0.10](https://github.com/ruedigerp/cloudflare-dns-manager/compare/v1.0.9...v1.0.10) (2024-11-12)
 
 
