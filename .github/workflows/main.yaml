@@ -1,0 +1,83 @@
+name: Build, Package, Release [dev]
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Go
+        uses: actions/setup-go@v5.0.0
+        with:
+          go-version: "1.21"
+
+      - name: Checkout repository
+        uses: actions/checkout@v4.1.6
+        with:
+          fetch-depth: 0
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.MO_CLI_TOKEN }}
+
+      - name: Create Sematic Release Version
+        run: |
+          git config --global user.email "ruediger@pretzlaff.info"
+          git config --global user.name "ruedigerp"
+          git config --global credential.helper cache
+          npx standard-version --prerelease dev
+          git push --follow-tags origin main
+
+      - name: Get the current version
+        id: get_version
+        run: echo "VERSION=$(git describe --tags $(git rev-list --tags --max-count=1))" >> $GITHUB_ENV
+
+      - name: Create release in another repo
+        run: |
+          echo "Creating release ${VERSION}"
+          gh release create refs/tags/${VERSION} --title "Release ${VERSION}" --repo mogenius/homebrew-mocli-dev
+        env:
+          GH_TOKEN: ${{ secrets.MO_CLI_TOKEN }}
+
+      - name: Execute make all
+        run: make -f Makefile-dev all
+
+      - name: Package artefacts
+        run: |
+          for file in builds/*; do
+            tar -czvf builds/$(basename "$file").tar.gz -C builds $(basename "$file")
+          done
+          ls -lisa builds
+
+      - name: Upload tarballs/executables
+        run: |
+          ls -lisa builds
+          for tarball in builds/*.tar.gz; do
+            gh release upload "${{ env.VERSION }}" "$tarball" --repo ruedigerp/cloudflare-dns-manager-homebrew
+          done
+          gh release upload "${{ env.VERSION }}" "builds/mocli-dev-${{ env.VERSION }}-windows-amd64" --repo ruedigerp/cloudflare-dns-manager-homebrew
+        env:
+          GH_TOKEN: ${{ secrets.MO_CLI_TOKEN }}
+
+      - name: Update Homebrew & Scoop
+        run: |
+          ./release-dev.sh
+          git config --global user.email "ruediger@pretzlaff.info"
+          git config --global user.name "ruedigerp"
+          git config --global credential.helper cache
+          git clone https://${{secrets.MO_CLI_TOKEN}}@github.com/ruedigerp/cloudflare-dns-manager-homebrew
+          cd homebrew-mocli-dev
+          cp ../mocli-dev.rb .
+          cp ../mocli-dev.json .
+          cp ../CHANGELOG.md .
+          git add .
+          git commit -m " ${{ env.VERSION }}"
+          git push
+        env:
+          GH_TOKEN: ${{ secrets.MO_CLI_TOKEN }}
