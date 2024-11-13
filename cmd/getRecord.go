@@ -14,9 +14,8 @@ var getRecordCmd = &cobra.Command{
 	ValidArgs: []string{"--domain", "-d"},
 	Run: func(cmd *cobra.Command, args []string) {
 		domain, _ := cmd.Flags().GetString("domain")
-		if domain == "" {
-			fmt.Printf("No domain/subdomain user -d|--domain test.domain.tld")
-
+		if dnsapi.CheckEmpty(domain, "domain", "-d|--domain test.domain.tld") {
+			return
 		} else {
 			zoneID := dnsconfig.Cloudflare.ZoneId
 			token := dnsconfig.Cloudflare.Token
