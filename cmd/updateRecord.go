@@ -21,9 +21,8 @@ var updateRecordCmd = &cobra.Command{
 		proxied, _ := cmd.Flags().GetBool("proxied")
 		zone, _ := cmd.Flags().GetString("zone")
 		serviceprovider, _ := cmd.Flags().GetString("serviceprovider")
-		if domain == "" {
-			fmt.Printf("No domain/subdomain user -d|--domain test.domain.tld")
-
+		if dnsapi.CheckEmpty(domain, "domain", "-d|--domain test.domain.tld") {
+			return
 		} else {
 			if serviceprovider == "cloudflare" {
 				zoneID := dnsconfig.Cloudflare.ZoneId
@@ -36,20 +35,10 @@ var updateRecordCmd = &cobra.Command{
 					fmt.Printf("Fehler beim abrufen des Records: %v\n", err)
 				}
 			} else if serviceprovider == "bind" {
-				if zone == "" {
-					fmt.Printf("Please provide zone. (--zone|-z example.com)\n")
-					return
-				}
-				if ip == "" {
-					fmt.Printf("Please provide ip address. (--ip|-i 123.123.123.123)\n")
-					return
-				}
-				if oldip == "" {
-					fmt.Printf("Please provide old ip address. (--oldip|-o 11.11.11.11)\n")
-					return
-				}
-				if rtype == "" {
-					fmt.Printf("Please provide zone. (--rytpe|-r (A|MX|TXT|...))\n")
+				if dnsapi.CheckEmpty(zone, "zone", "-z|--zone example.com") ||
+					dnsapi.CheckEmpty(ip, "ip address", "-i|--ip 123.123.123.123") ||
+					dnsapi.CheckEmpty(oldip, "old ip address", "-o|--oldip 11.11.11.11") ||
+					dnsapi.CheckEmpty(rtype, "record type", "-r|--rtype (A|MX|TXT|...)") {
 					return
 				}
 				dnsapi.BindUpdateRecord(dnsconfig.Bind.Server, dnsconfig.Bind.Keyname, dnsconfig.Bind.Hmackey, zone, domain, ip, oldip, rtype)
