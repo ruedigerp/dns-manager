@@ -54,8 +54,11 @@ func AddRecord(zoneID string, token string, domain string, rtype string, ip stri
 }
 
 func UpdateRecord(zoneID string, token string, domain string, rtype string, ip string, proxied bool) (string, error) {
+
 	exists, recordID, _ := GetRecordId(zoneID, token, domain)
+
 	var msg = ""
+
 	if exists {
 		url := fmt.Sprintf("https://api.cloudflare.com/client/v4/zones/%s/dns_records/%s", zoneID, recordID)
 
@@ -83,6 +86,7 @@ func UpdateRecord(zoneID string, token string, domain string, rtype string, ip s
 		req.Header.Add("Content-Type", "application/json")
 
 		client := &http.Client{}
+
 		resp, err := client.Do(req)
 		if err != nil {
 			fmt.Println("Fehler beim Senden des PUT-Requests:", err)
@@ -95,8 +99,11 @@ func UpdateRecord(zoneID string, token string, domain string, rtype string, ip s
 		} else {
 			fmt.Printf("Fehler beim Aktualisieren des DNS-Records. Status Code: %d\n", resp.StatusCode)
 		}
+
 	}
+
 	return msg, nil
+
 }
 
 func GetRecord(zoneID string, token string, domain string) (bool, string, string, error) {
@@ -128,6 +135,7 @@ func GetRecord(zoneID string, token string, domain string) (bool, string, string
 	var response Response
 	var id string
 	var msg string
+
 	err = json.Unmarshal(body, &response)
 	if err != nil {
 		return false, "Fehler beim Unmarshalling der JSON-Antwort", "", err
@@ -141,6 +149,7 @@ func GetRecord(zoneID string, token string, domain string) (bool, string, string
 	}
 
 	return true, string(id), msg, nil
+
 }
 
 func GetRecordId(zoneID string, token string, domain string) (bool, string, error) {
@@ -171,6 +180,7 @@ func GetRecordId(zoneID string, token string, domain string) (bool, string, erro
 
 	var response Response
 	var id string
+
 	err = json.Unmarshal(body, &response)
 	if err != nil {
 		return false, "Fehler beim Unmarshalling der JSON-Antwort", err
@@ -183,6 +193,7 @@ func GetRecordId(zoneID string, token string, domain string) (bool, string, erro
 	}
 
 	return true, string(id), nil
+
 }
 
 func DeleteRecord(zoneID string, token string, recordID string) (bool, error) {
@@ -213,5 +224,7 @@ func DeleteRecord(zoneID string, token string, recordID string) (bool, error) {
 		fmt.Printf("Fehler beim Löschen des DNS-Records. Status Code: %d\n", resp.StatusCode)
 		return false, err
 	}
+
 	return true, nil
+
 }
