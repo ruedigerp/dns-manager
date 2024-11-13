@@ -13,20 +13,24 @@ var getRecordCmd = &cobra.Command{
 	Long:      `Get Cloudflare DSN Record`,
 	ValidArgs: []string{"--domain", "-d"},
 	Run: func(cmd *cobra.Command, args []string) {
+
 		domain, _ := cmd.Flags().GetString("domain")
+
 		if dnsapi.CheckEmpty(domain, "domain", "-d|--domain test.domain.tld") {
 			return
+		}
+
+		zoneID := dnsconfig.Cloudflare.ZoneId
+		token := dnsconfig.Cloudflare.Token
+
+		// dnsapi.GetRecord(zoneID, token, domain)
+
+		resp, recordID, msg, _ := dnsapi.GetRecord(zoneID, token, domain)
+		if resp {
+			fmt.Printf("RecordID: %s\n", recordID)
+			fmt.Printf("%s\n", msg)
 		} else {
-			zoneID := dnsconfig.Cloudflare.ZoneId
-			token := dnsconfig.Cloudflare.Token
-			dnsapi.GetRecord(zoneID, token, domain)
-			resp, recordID, msg, _ := dnsapi.GetRecord(zoneID, token, domain)
-			if resp {
-				fmt.Printf("RecordID: %s\n", recordID)
-				fmt.Printf("%s\n", msg)
-			} else {
-				fmt.Printf("Record not found\n")
-			}
+			fmt.Printf("Record not found\n")
 		}
 
 	},
