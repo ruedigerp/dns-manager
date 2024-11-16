@@ -18,7 +18,7 @@ func AddRecord(zoneID string, token string, domain string, rtype string, ip stri
 		Name:    domain,
 		Content: ip,
 		TTL:     1,
-		Proxied: false,
+		Proxied: proxied,
 	}
 
 	jsonData, err := json.Marshal(dnsRecord)
