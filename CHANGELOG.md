@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.19](https://github.com/ruedigerp/dns-manager/compare/v1.0.18...v1.0.19) (2024-11-20)
+
+
+### Bug Fixes
+
+* batch for cloudflare add record type ([7330181](https://github.com/ruedigerp/dns-manager/commit/73301813e81f7d99bb9563ddc6dbe122f7c47f28))
+* remove dns-operator ([2583ddd](https://github.com/ruedigerp/dns-manager/commit/2583ddd983ab1839e115a78adafe54f2139454c5))
+
 ### [1.0.18](https://github.com/ruedigerp/dns-manager/compare/v1.0.17...v1.0.18) (2024-11-16)
 
 
