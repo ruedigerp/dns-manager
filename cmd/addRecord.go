@@ -20,6 +20,7 @@ var addRecordCmd = &cobra.Command{
 		proxied, _ := cmd.Flags().GetBool("proxied")
 		zone, _ := cmd.Flags().GetString("zone")
 		serviceprovider, _ := cmd.Flags().GetString("serviceprovider")
+		comment, _ := cmd.Flags().GetString("comment")
 
 		if dnsapi.CheckEmpty(ip, "ip address", "-i|--ip 123.123.123.123") ||
 			dnsapi.CheckEmpty(domain, "domain", "-d|--domain test.domain.tld") {
@@ -44,7 +45,7 @@ var addRecordCmd = &cobra.Command{
 
 			} else {
 
-				dnsapi.AddRecord(zoneID, token, domain, rtype, ip, proxied)
+				dnsapi.AddRecord(zoneID, token, domain, rtype, ip, proxied, comment)
 
 				resp, recordID, err := dnsapi.GetRecordId(zoneID, token, domain)
 				if resp {

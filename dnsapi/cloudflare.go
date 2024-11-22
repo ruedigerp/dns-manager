@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-func AddRecord(zoneID string, token string, domain string, rtype string, ip string, proxied bool) (string, error) {
+func AddRecord(zoneID string, token string, domain string, rtype string, ip string, proxied bool, comment string) (string, error) {
 
 	var msg = ""
 	url := fmt.Sprintf("https://api.cloudflare.com/client/v4/zones/%s/dns_records", zoneID)
@@ -19,6 +19,7 @@ func AddRecord(zoneID string, token string, domain string, rtype string, ip stri
 		Content: ip,
 		TTL:     1,
 		Proxied: proxied,
+		Comment: comment,
 	}
 
 	jsonData, err := json.Marshal(dnsRecord)
@@ -53,7 +54,7 @@ func AddRecord(zoneID string, token string, domain string, rtype string, ip stri
 	return msg, nil
 }
 
-func UpdateRecord(zoneID string, token string, domain string, rtype string, ip string, proxied bool) (string, error) {
+func UpdateRecord(zoneID string, token string, domain string, rtype string, ip string, proxied bool, comment string) (string, error) {
 
 	exists, recordID, _ := GetRecordId(zoneID, token, domain)
 
@@ -68,6 +69,7 @@ func UpdateRecord(zoneID string, token string, domain string, rtype string, ip s
 			Content: ip,
 			TTL:     1,
 			Proxied: proxied,
+			Comment: comment,
 		}
 
 		jsonData, err := json.Marshal(dnsRecord)

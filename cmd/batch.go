@@ -33,7 +33,7 @@ var batchCmd = &cobra.Command{
 
 				if dnsconfig.Batch.Provider == "cloudflare" {
 
-					dnsapi.AddRecord(zoneID, token, domain, dnsconfig.Batch.Rtype, dnsconfig.Batch.IP, dnsconfig.Batch.Proxied)
+					dnsapi.AddRecord(zoneID, token, domain, dnsconfig.Batch.Rtype, dnsconfig.Batch.IP, dnsconfig.Batch.Proxied, dnsconfig.Batch.Comment)
 
 				} else if dnsconfig.Batch.Provider == "bind" {
 
@@ -64,7 +64,7 @@ var batchCmd = &cobra.Command{
 
 				if dnsconfig.Batch.Provider == "cloudflare" {
 
-					dnsapi.UpdateRecord(zoneID, token, domain, dnsconfig.Batch.Rtype, dnsconfig.Batch.IP, dnsconfig.Batch.Proxied)
+					dnsapi.UpdateRecord(zoneID, token, domain, dnsconfig.Batch.Rtype, dnsconfig.Batch.IP, dnsconfig.Batch.Proxied, dnsconfig.Batch.Comment)
 
 				} else if dnsconfig.Batch.Provider == "bind" {
 

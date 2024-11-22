@@ -18,6 +18,7 @@ type DNSRecord struct {
 	Content string `json:"content"` // IP-Adresse oder Zielinhalt des Records
 	TTL     int    `json:"ttl"`     // Time-To-Live in Sekunden (z.B. 1 für "Auto")
 	Proxied bool   `json:"proxied"` // Ob der Record über Cloudflare geleitet werden soll
+	Comment string `json:"comment,omitempty"`
 }
 
 type Config struct {
@@ -44,5 +45,6 @@ type Config struct {
 		Proxied  bool     `yaml:"proxied"`
 		Rtype    string   `yaml:"rtype"`
 		Domains  []string `yaml:"domains"`
+		Comment  string   `yaml:"comment"`
 	}
 }

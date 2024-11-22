@@ -62,5 +62,6 @@ func init() {
 	rootCmd.PersistentFlags().BoolP("proxied", "p", false, "Record type (A,TXT,CNAME, ...)")
 	rootCmd.PersistentFlags().StringVarP(&config, "config", "c", "", "config.yaml")
 	rootCmd.PersistentFlags().StringP("serviceprovider", "s", "", "Service Provider (Cloudflare, bind)")
+	rootCmd.PersistentFlags().StringP("textcomment", "t", "", "Comment")
 
 }
