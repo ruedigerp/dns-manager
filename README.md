@@ -1,3 +1,5 @@
+[![Build, Package, Release](https://github.com/ruedigerp/dns-manager/actions/workflows/main.yaml/badge.svg)](https://github.com/ruedigerp/dns-manager/actions/workflows/main.yaml)
+
 # dns-manager 
 
 A command-line tool to manage DNS records in Cloudflare or Bind DNS server zones. With DNS Manager, you can create, update, retrieve, and delete DNS records easily, and even perform batch operations across multiple records.
