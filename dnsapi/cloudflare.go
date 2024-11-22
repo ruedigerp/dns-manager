@@ -12,13 +12,14 @@ func AddRecord(zoneID string, token string, domain string, rtype string, ip stri
 
 	var msg = ""
 	url := fmt.Sprintf("https://api.cloudflare.com/client/v4/zones/%s/dns_records", zoneID)
-
+	comment := "app2"
 	dnsRecord := DNSRecord{
 		Type:    rtype,
 		Name:    domain,
 		Content: ip,
 		TTL:     1,
 		Proxied: proxied,
+		Comment: comment,
 	}
 
 	jsonData, err := json.Marshal(dnsRecord)
@@ -61,13 +62,14 @@ func UpdateRecord(zoneID string, token string, domain string, rtype string, ip s
 
 	if exists {
 		url := fmt.Sprintf("https://api.cloudflare.com/client/v4/zones/%s/dns_records/%s", zoneID, recordID)
-
+		comment := "app2"
 		dnsRecord := DNSRecord{
 			Type:    rtype,
 			Name:    domain,
 			Content: ip,
 			TTL:     1,
 			Proxied: proxied,
+			Comment: comment,
 		}
 
 		jsonData, err := json.Marshal(dnsRecord)
