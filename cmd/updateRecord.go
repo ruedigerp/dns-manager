@@ -28,6 +28,7 @@ var updateRecordCmd = &cobra.Command{
 		proxied, _ := cmd.Flags().GetBool("proxied")
 		zone, _ := cmd.Flags().GetString("zone")
 		serviceprovider, _ := cmd.Flags().GetString("serviceprovider")
+		comment, _ := cmd.Flags().GetString("comment")
 
 		if dnsapi.CheckEmpty(ip, "ip address", "-i|--ip 123.123.123.123") ||
 			dnsapi.CheckEmpty(domain, "domain", "-d|--domain test.domain.tld") {
@@ -42,7 +43,7 @@ var updateRecordCmd = &cobra.Command{
 			zoneID := dnsconfig.Cloudflare.ZoneId
 			token := dnsconfig.Cloudflare.Token
 
-			dnsapi.UpdateRecord(zoneID, token, domain, rtype, ip, proxied)
+			dnsapi.UpdateRecord(zoneID, token, domain, rtype, ip, proxied, comment)
 
 			resp, recordID, err := dnsapi.GetRecordId(zoneID, token, domain)
 

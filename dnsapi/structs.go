@@ -45,5 +45,6 @@ type Config struct {
 		Proxied  bool     `yaml:"proxied"`
 		Rtype    string   `yaml:"rtype"`
 		Domains  []string `yaml:"domains"`
+		Comment  string   `yaml:"comment"`
 	}
 }
