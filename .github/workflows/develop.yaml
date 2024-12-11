@@ -3,7 +3,11 @@ name: Build, Package, Release [dev]
 on:
   push:
     branches:
-      - delevop
+      - develop
+
+permissions:
+  contents: write
+  pull-requests: write
 
 jobs:
   build:
@@ -26,13 +30,24 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.MO_CLI_TOKEN }}
 
-      - name: Create Sematic Release Version
-        run: |
-          git config --global user.email "ruediger@pretzlaff.info"
-          git config --global user.name "ruedigerp"
-          git config --global credential.helper cache
-          npx standard-version --prerelease dev
-          git push --follow-tags origin delevop
+      # - name: Create Sematic Release Version
+      #   run: |
+      #     git config --global user.email "ruediger@pretzlaff.info"
+      #     git config --global user.name "ruedigerp"
+      #     git config --global credential.helper cache
+      #     npx standard-version --prerelease dev
+      #     git push --follow-tags origin delevop
+
+      - name: release-please 
+        uses: googleapis/release-please-action@v4
+        with:
+          # this assumes that you have created a personal access token
+          # (PAT) and configured it as a GitHub action secret named
+          # `MY_RELEASE_PLEASE_TOKEN` (this secret name is not important).
+          token: ${{ secrets.MO_CLI_TOKEN }}
+          # this is a built-in strategy in release-please, see "Action Inputs"
+          # for more options
+          release-type: simple          
 
       - name: Get the current version
         id: get_version
