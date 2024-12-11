@@ -9,7 +9,7 @@ permissions:
   contents: write
   pull-requests: write
 
-  
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -64,10 +64,10 @@ jobs:
           new_version="v${major}.${minor}.${patch}"
           # Prüfen, ob der aktuelle Branch 'develop' ist
     
-          branch_name=$(echo "${GITHUB_REF##*/}")
-          if [[ "$branch_name" == "develop" ]]; then
-            new_version="${new_version}-develop"
-          fi
+          # branch_name=$(echo "${GITHUB_REF##*/}")
+          # if [[ "$branch_name" == "develop" ]]; then
+          #   new_version="${new_version}-develop"
+          # fi
           echo "new_version=$new_version" >> $GITHUB_ENV
           echo "::set-output name=new_version::$new_version"
   
