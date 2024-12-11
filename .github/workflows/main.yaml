@@ -97,13 +97,13 @@ jobs:
         run: |
           # Neueste Commit-Nachricht abrufen
           commit_message=$(git log -1 --pretty=%B)
-
+      
           # Alte Version ohne das 'v'
           version=${tag/v/}
-
+      
           # Version in Major, Minor, Patch aufteilen
           IFS='.' read -r major minor patch <<< "$version"
-
+      
           # Basierend auf Commit-Nachricht die Version erhöhen
           if [[ "$commit_message" == fix:* ]]; then
             patch=$((patch + 1))  # Patch erhöhen
@@ -118,18 +118,13 @@ jobs:
             echo "No version bump for commit message: $commit_message"
             exit 0
           fi
-
+      
           # Neue Version erstellen
           new_version="v${major}.${minor}.${patch}"
           echo "new_version=$new_version" >> $GITHUB_ENV
-
-          echo "Bumped version based on commit message '$commit_message' to $new_version"
-
-          # version=${tag/v/}  # Entfernt das 'v' vor der Version
-          # IFS='.' read -r major minor patch <<< "$version"
-          # patch=$((patch + 1))  # Erhöht die Patch-Version
-          # new_version="v${major}.${minor}.${patch}"
-          # echo "new_version=$new_version" >> $GITHUB_ENV
+          echo "::set-output name=new_version::$new_version"
+        outputs:
+          new_version: ${{ steps.bump_version.outputs.new_version }}
 
       - name: Create new tag
         run: |
@@ -140,10 +135,10 @@ jobs:
 
       - name: Create release in another repo
         run: |
-          gh release create ${{ env.new_version }} --title "Release ${{ env.new_version }}" --repo ruedigerp/homebrew-dns-manager
+          gh release create ${{ steps.bump_version.outputs.new_version }} --title "Release ${{ steps.bump_version.outputs.new_version }}" --repo ruedigerp/homebrew-dns-manager
         env:
           GH_TOKEN: ${{ secrets.MO_CLI_TOKEN }}
-          new_version: ${{ env.new_version }}
+          # new_version: ${{ env.new_version }}
 
       # - name: Create release in another repo
       #   run: |
@@ -180,9 +175,9 @@ jobs:
           ls -lisa builds
           for tarball in builds/*.tar.gz; do
             echo "Tarball: $tarball"
-            gh release upload "${{ env.new_version }}" "$tarball" --repo ruedigerp/homebrew-dns-manager
+            gh release upload "${{ steps.bump_version.outputs.new_version }}" "$tarball" --repo ruedigerp/homebrew-dns-manager
           done
-          gh release upload "${{ env.new_version }}" "builds/dns-manager-${{ env.new_version }}-windows-amd64" --repo ruedigerp/homebrew-dns-manager
+          gh release upload "${{ steps.bump_version.outputs.new_version }}" "builds/dns-manager-${{ steps.bump_version.outputs.new_version }}-windows-amd64" --repo ruedigerp/homebrew-dns-manager
         env:
           GH_TOKEN: ${{ secrets.MO_CLI_TOKEN }}
           new_version: ${{ env.new_version }}
@@ -199,7 +194,7 @@ jobs:
           cp ../dns-manager.json .
           cp ../CHANGELOG.md .
           git add .
-          git commit -m " ${{ env.new_version }}"
+          git commit -m " ${{ steps.bump_version.outputs.new_version }}"
           git push
         env:
           GH_TOKEN: ${{ secrets.MO_CLI_TOKEN }}
