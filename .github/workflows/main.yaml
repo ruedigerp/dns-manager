@@ -26,29 +26,29 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.MO_CLI_TOKEN }}
 
-      # - name: Create Sematic Release Version
-      #   run: |
-      #     git config --global user.email "ruediger@pretzlaff.info"
-      #     git config --global user.name "dns-manager"
-      #     git config --global credential.helper cache
-      #     npx standard-version
-      #     git push --follow-tags origin main
+      - name: Create Sematic Release Version
+        run: |
+          git config --global user.email "ruediger@pretzlaff.info"
+          git config --global user.name "dns-manager"
+          git config --global credential.helper cache
+          npx standard-version
+          git push --follow-tags origin main
 
-      # - name: release-please 
-      #   uses: googleapis/release-please-action@v4
-      #   with:
-      #     # this assumes that you have created a personal access token
-      #     # (PAT) and configured it as a GitHub action secret named
-      #     # `MY_RELEASE_PLEASE_TOKEN` (this secret name is not important).
-      #     token: ${{ secrets.MO_CLI_TOKEN }}
-      #     # this is a built-in strategy in release-please, see "Action Inputs"
-      #     # for more options
-      #     release-type: simple 
-      #     target-branch: ${{ github.ref_name }}
+      - name: release-please 
+        uses: googleapis/release-please-action@v4
+        with:
+          # this assumes that you have created a personal access token
+          # (PAT) and configured it as a GitHub action secret named
+          # `MY_RELEASE_PLEASE_TOKEN` (this secret name is not important).
+          token: ${{ secrets.MO_CLI_TOKEN }}
+          # this is a built-in strategy in release-please, see "Action Inputs"
+          # for more options
+          release-type: simple 
+          target-branch: ${{ github.ref_name }}
 
-      # - name: Get the current version
-      #   id: get_version
-      #   run: echo "VERSION=$(git describe --tags $(git rev-list --tags --max-count=1))" >> $GITHUB_ENV
+      - name: Get the current version
+        id: get_version
+        run: echo "VERSION=$(git describe --tags $(git rev-list --tags --max-count=1))" >> $GITHUB_ENV
 
       # - name: release-please 
       #   uses: googleapis/release-please-action@v4
@@ -88,66 +88,66 @@ jobs:
       #   id: get_version
       #   run: echo "tag=$(node -p \"require('./package.json').version\")" >> $GITHUB_ENV
 
-      - name: Get latest tag
-        id: get_tag
-        run: |
-          echo "tag=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
-          echo "Tag: ${{ env.tag }}"
+      # - name: Get latest tag
+      #   id: get_tag
+      #   run: |
+      #     echo "tag=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
+      #     echo "Tag: ${{ env.tag }}"
 
-      - name: Bump version
-        id: bump_version
-        run: |
-          # Neueste Commit-Nachricht abrufen
-          commit_message=$(git log -1 --pretty=%B)
-          # Alte Version ohne das 'v'
-          version=${tag/v/}
-          # Version in Major, Minor, Patch aufteilen
-          IFS='.' read -r major minor patch <<< "$version"
-          # Basierend auf Commit-Nachricht die Version erhöhen
-          if [[ "$commit_message" == fix:* ]]; then
-            patch=$((patch + 1))  # Patch erhöhen
-          elif [[ "$commit_message" == feat:* ]]; then
-            minor=$((minor + 1))  # Minor erhöhen
-            patch=0  # Patch zurücksetzen
-          elif [[ "$commit_message" == chore:* ]]; then
-            major=$((major + 1))  # Major erhöhen
-            minor=0  # Minor zurücksetzen
-            patch=0  # Patch zurücksetzen
-          else
-            echo "No version bump for commit message: $commit_message"
-            exit 0
-          fi
-          # Neue Version erstellen
-          new_version="v${major}.${minor}.${patch}"
-          # Prüfen, ob der aktuelle Branch 'develop' ist
+      # - name: Bump version
+      #   id: bump_version
+      #   run: |
+      #     # Neueste Commit-Nachricht abrufen
+      #     commit_message=$(git log -1 --pretty=%B)
+      #     # Alte Version ohne das 'v'
+      #     version=${tag/v/}
+      #     # Version in Major, Minor, Patch aufteilen
+      #     IFS='.' read -r major minor patch <<< "$version"
+      #     # Basierend auf Commit-Nachricht die Version erhöhen
+      #     if [[ "$commit_message" == fix:* ]]; then
+      #       patch=$((patch + 1))  # Patch erhöhen
+      #     elif [[ "$commit_message" == feat:* ]]; then
+      #       minor=$((minor + 1))  # Minor erhöhen
+      #       patch=0  # Patch zurücksetzen
+      #     elif [[ "$commit_message" == chore:* ]]; then
+      #       major=$((major + 1))  # Major erhöhen
+      #       minor=0  # Minor zurücksetzen
+      #       patch=0  # Patch zurücksetzen
+      #     else
+      #       echo "No version bump for commit message: $commit_message"
+      #       exit 0
+      #     fi
+      #     # Neue Version erstellen
+      #     new_version="v${major}.${minor}.${patch}"
+      #     # Prüfen, ob der aktuelle Branch 'develop' ist
     
-          # branch_name=$(echo "${GITHUB_REF##*/}")
-          # if [[ "$branch_name" == "develop" ]]; then
-          #   new_version="${new_version}-develop"
-          # fi
-          echo "new_version=$new_version" >> $GITHUB_ENV
-          echo "::set-output name=new_version::$new_version"
+      #     # branch_name=$(echo "${GITHUB_REF##*/}")
+      #     # if [[ "$branch_name" == "develop" ]]; then
+      #     #   new_version="${new_version}-develop"
+      #     # fi
+      #     echo "new_version=$new_version" >> $GITHUB_ENV
+      #     echo "::set-output name=new_version::$new_version"
 
-      - name: Create new tag
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git tag ${{ env.new_version }}
-          git push origin ${{ env.new_version }}
-
-      - name: Create release in another repo
-        run: |
-          gh release create ${{ env.new_version }} --title "Release ${{ env.new_version }}" --repo ruedigerp/homebrew-dns-manager
-        env:
-          GH_TOKEN: ${{ secrets.MO_CLI_TOKEN }}
-          new_version: ${{ env.new_version }}
+      # - name: Create new tag
+      #   run: |
+      #     git config user.name "github-actions[bot]"
+      #     git config user.email "github-actions[bot]@users.noreply.github.com"
+      #     git tag ${{ env.new_version }}
+      #     git push origin ${{ env.new_version }}
 
       # - name: Create release in another repo
       #   run: |
-      #     echo "Creating release ${tag}"
-      #     gh release create refs/tags/${tag} --title "Release ${tag}" --repo ruedigerp/homebrew-dns-manager
+      #     gh release create ${{ env.new_version }} --title "Release ${{ env.new_version }}" --repo ruedigerp/homebrew-dns-manager
       #   env:
       #     GH_TOKEN: ${{ secrets.MO_CLI_TOKEN }}
+      #     new_version: ${{ env.new_version }}
+
+      - name: Create release in another repo
+        run: |
+          echo "Creating release ${get_version}"
+          gh release create refs/tags/${get_version} --title "Release ${get_version}" --repo ruedigerp/homebrew-dns-manager
+        env:
+          GH_TOKEN: ${{ secrets.MO_CLI_TOKEN }}
 
       - name: Initialize Go dependencies
         run: go mod tidy
