@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
 
+## [1.0.25](https://github.com/ruedigerp/dns-manager/compare/v1.0.24...v1.0.25) (2024-12-11)
+
+
+### Bug Fixes
+
+* test 13 ([c449422](https://github.com/ruedigerp/dns-manager/commit/c4494227fcf59c3ae340a14d0cd1ef6979bc5dbb))
+* test changeset ([f89928c](https://github.com/ruedigerp/dns-manager/commit/f89928c3188915d9ddb840c851fde95df2c9d202))
+
 ## [1.0.24](https://github.com/ruedigerp/dns-manager/compare/v1.0.23...v1.0.24) (2024-12-11)
 
 
