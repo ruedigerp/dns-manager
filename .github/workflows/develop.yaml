@@ -40,6 +40,7 @@ jobs:
 
       - name: release-please 
         uses: googleapis/release-please-action@v4
+        id: release
         with:
           # this assumes that you have created a personal access token
           # (PAT) and configured it as a GitHub action secret named
@@ -56,10 +57,11 @@ jobs:
 
       - name: Create release in another repo
         run: |
-          echo "Creating release ${ steps.release.outputs.release_created }"
-          gh release create refs/tags/${ steps.release.outputs.release_created } --title "Release ${ steps.release.outputs.release_created }" --repo ruedigerp/homebrew-dns-manager
+          echo "Creating release ${VERSION}"
+          gh release create refs/tags/${VERSION} --title "Release ${VERSION}" --repo ruedigerp/homebrew-dns-manager
         env:
           GH_TOKEN: ${{ secrets.MO_CLI_TOKEN }}
+          VERSION: ${{ steps.release.outputs.release_created }}
 
       - name: Execute make all
         run: make -f Makefile-dev all
