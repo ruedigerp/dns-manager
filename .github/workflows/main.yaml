@@ -63,7 +63,8 @@ jobs:
       
       - name: Get latest version tag
         id: get_tag
-        run: echo "tag=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
+        # run: echo "tag=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
+        run: echo "tag=$(git describe --tags $(git rev-list --tags --max-count=1))" >> $GITHUB_ENV
 
       - name: Create release in another repo
         run: |

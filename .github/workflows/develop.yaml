@@ -3,7 +3,7 @@ name: Build, Package, Release [dev]
 on:
   push:
     branches:
-      - develop
+      - developX
 
 permissions:
   contents: write
@@ -51,7 +51,8 @@ jobs:
       
       - name: Get latest version tag
         id: get_tag
-        run: echo "tag=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
+        # run: echo "tag=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
+        run: echo "tag=$(git describe --tags $(git rev-list --tags --max-count=1))" >> $GITHUB_ENV
 
       # - name: Debug Outputs
       #   run: | 
