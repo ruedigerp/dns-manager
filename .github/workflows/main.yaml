@@ -90,9 +90,9 @@ jobs:
 
       - name: Get latest tag
         id: get_tag
-        run: 
-          echo "current tag=$(git describe --tags --abbrev=0)" 
+        run: |
           echo "tag=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
+          echo "Tag: ${{ env.tag }}"
 
       - name: Bump version
         id: bump_version
