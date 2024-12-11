@@ -66,34 +66,60 @@ jobs:
       #   # run: echo "tag=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
       #   run: echo "tag=$(git describe --tags $(git rev-list --tags --max-count=1))" >> $GITHUB_ENV
 
-      - name: Install Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: "18"
+      # - name: Install Node.js
+      #   uses: actions/setup-node@v3
+      #   with:
+      #     node-version: "18"
 
-      - name: Install dependencies
-        run: npm install
+      # - name: Install dependencies
+      #   run: npm install
 
-      - name: Apply Changesets
-        id: changesets
+      # - name: Apply Changesets
+      #   id: changesets
+      #   run: |
+      #     # Bump the version and commit the changes
+      #     npx changeset version
+      #     # Push the changes back to the repo
+      #     git config user.name "github-actions[bot]"
+      #     git config user.email "github-actions[bot]@users.noreply.github.com"
+      #     git push --follow-tags origin ${{ github.ref_name }}
+
+      # - name: Extract new version
+      #   id: get_version
+      #   run: echo "tag=$(node -p \"require('./package.json').version\")" >> $GITHUB_ENV
+
+      - name: Get latest tag
+        id: get_tag
+        run: echo "tag=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
+
+      - name: Bump version
+        id: bump_version
         run: |
-          # Bump the version and commit the changes
-          npx changeset version
-          # Push the changes back to the repo
+          version=${tag/v/}  # Entfernt das 'v' vor der Version
+          IFS='.' read -r major minor patch <<< "$version"
+          patch=$((patch + 1))  # Erhöht die Patch-Version
+          new_version="v${major}.${minor}.${patch}"
+          echo "new_version=$new_version" >> $GITHUB_ENV
+
+      - name: Create new tag
+        run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git push --follow-tags origin ${{ github.ref_name }}
-
-      - name: Extract new version
-        id: get_version
-        run: echo "tag=$(node -p \"require('./package.json').version\")" >> $GITHUB_ENV
+          git tag ${{ env.new_version }}
+          git push origin ${{ env.new_version }}
 
       - name: Create release in another repo
         run: |
-          echo "Creating release ${tag}"
-          gh release create refs/tags/${tag} --title "Release ${tag}" --repo ruedigerp/homebrew-dns-manager
+          gh release create ${{ env.new_version }} --title "Release ${{ env.new_version }}" --repo ruedigerp/homebrew-dns-manager
         env:
           GH_TOKEN: ${{ secrets.MO_CLI_TOKEN }}
+
+      # - name: Create release in another repo
+      #   run: |
+      #     echo "Creating release ${tag}"
+      #     gh release create refs/tags/${tag} --title "Release ${tag}" --repo ruedigerp/homebrew-dns-manager
+      #   env:
+      #     GH_TOKEN: ${{ secrets.MO_CLI_TOKEN }}
 
       - name: Initialize Go dependencies
         run: go mod tidy
