@@ -51,6 +51,10 @@ jobs:
           release-type: simple
           target-branch: ${{ github.ref_name }}
 
+      - name: Debug Outputs
+        run: | 
+          echo "Outputs: ${{ toJson(steps.release.outputs) }}"
+
       - name: Get the current version
         id: get_version
         run: echo "VERSION=$(git describe --tags $(git rev-list --tags --max-count=1))" >> $GITHUB_ENV
