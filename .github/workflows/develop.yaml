@@ -47,7 +47,8 @@ jobs:
           token: ${{ secrets.MO_CLI_TOKEN }}
           # this is a built-in strategy in release-please, see "Action Inputs"
           # for more options
-          release-type: simple          
+          release-type: simple
+          target-branch: ${{ github.ref_name }}
 
       - name: Get the current version
         id: get_version
