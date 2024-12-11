@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.13](https://github.com/ruedigerp/dns-manager/compare/v1.0.12...v1.0.13) (2024-12-11)
+
+
+### Bug Fixes
+
+* add batch mode für bind dns Zonen ([73f32f1](https://github.com/ruedigerp/dns-manager/commit/73f32f181e5b5f5708cf45e8b390a8f89672b29b))
+* add comments to cloudflare records ([8580514](https://github.com/ruedigerp/dns-manager/commit/8580514c04f672e9ccc66d0fed9404a407575169))
+* add empty check ([b055f13](https://github.com/ruedigerp/dns-manager/commit/b055f13c91a3c29da6895a073e42f8be56dcdceb))
+* add ip check ([18b88ae](https://github.com/ruedigerp/dns-manager/commit/18b88aed93f524c608acf684ff4a292d8b8092a0))
+* batch for cloudflare add record type ([7330181](https://github.com/ruedigerp/dns-manager/commit/73301813e81f7d99bb9563ddc6dbe122f7c47f28))
+* cf add record fix proxied ([b644d27](https://github.com/ruedigerp/dns-manager/commit/b644d2732e5c90289cb3ba6625340842608f9202))
+* edit action ([86154ba](https://github.com/ruedigerp/dns-manager/commit/86154ba5fcf83aed7eabe62ae7b254accf36273a))
+* fix some issue and make code more readable ([9a5f90d](https://github.com/ruedigerp/dns-manager/commit/9a5f90d4a9f99b3db0925032240472dbe4a4917c))
+* plase-release 3 ([b94c3d4](https://github.com/ruedigerp/dns-manager/commit/b94c3d43a19b88416a6d05343215126ad7ca9787))
+* quickfix comment flag ([7b808a2](https://github.com/ruedigerp/dns-manager/commit/7b808a2166adf56152d5e7fbd8931ee9e1ac056b))
+* remove dns-operator ([2583ddd](https://github.com/ruedigerp/dns-manager/commit/2583ddd983ab1839e115a78adafe54f2139454c5))
+* test 3 ([462e031](https://github.com/ruedigerp/dns-manager/commit/462e0314464f425215a90f3e520f81a76389cb16))
+* test release-please 2 ([babefbc](https://github.com/ruedigerp/dns-manager/commit/babefbc40ba8c904a47237abc04fdb16b9499d9b))
+* Test release-plese ([8f97089](https://github.com/ruedigerp/dns-manager/commit/8f970891a7896dbb238551230beef5cda0c26ce3))
+
 ### [1.0.12](https://github.com/ruedigerp/dns-manager/compare/v1.0.11...v1.0.12) (2024-11-12)
 
 
