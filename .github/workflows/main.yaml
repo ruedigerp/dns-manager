@@ -143,6 +143,7 @@ jobs:
           gh release create ${{ env.new_version }} --title "Release ${{ env.new_version }}" --repo ruedigerp/homebrew-dns-manager
         env:
           GH_TOKEN: ${{ secrets.MO_CLI_TOKEN }}
+          new_version: ${{ env.new_version }}
 
       # - name: Create release in another repo
       #   run: |
@@ -184,6 +185,7 @@ jobs:
           gh release upload "${{ env.new_version }}" "builds/dns-manager-${{ env.new_version }}-windows-amd64" --repo ruedigerp/homebrew-dns-manager
         env:
           GH_TOKEN: ${{ secrets.MO_CLI_TOKEN }}
+          new_version: ${{ env.new_version }}
 
       - name: UPDATE BREW / SCOOP
         run: |
@@ -201,3 +203,4 @@ jobs:
           git push
         env:
           GH_TOKEN: ${{ secrets.MO_CLI_TOKEN }}
+          new_version: ${{ env.new_version }}
