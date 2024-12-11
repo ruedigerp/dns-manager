@@ -144,8 +144,8 @@ jobs:
 
       - name: Create release in another repo
         run: |
-          echo "Creating release ${get_version}"
-          gh release create refs/tags/${get_version} --title "Release ${get_version}" --repo ruedigerp/homebrew-dns-manager
+          echo "Creating release ${VERSION}"
+          gh release create refs/tags/${VERSION} --title "Release ${VERSION}" --repo ruedigerp/homebrew-dns-manager
         env:
           GH_TOKEN: ${{ secrets.MO_CLI_TOKEN }}
 
@@ -177,12 +177,11 @@ jobs:
           ls -lisa builds
           for tarball in builds/*.tar.gz; do
             echo "Tarball: $tarball"
-            gh release upload "${{ steps.bump_version.outputs.new_version }}" "$tarball" --repo ruedigerp/homebrew-dns-manager
+            gh release upload "${{ env.VERSION }}" "$tarball" --repo ruedigerp/homebrew-dns-manager
           done
-          gh release upload "${{ steps.bump_version.outputs.new_version }}" "builds/dns-manager-${{ steps.bump_version.outputs.new_version }}-windows-amd64" --repo ruedigerp/homebrew-dns-manager
+          gh release upload "${{ env.VERSION }}" "builds/dns-manager-${{ env.VERSION }}-windows-amd64" --repo ruedigerp/homebrew-dns-manager
         env:
           GH_TOKEN: ${{ secrets.MO_CLI_TOKEN }}
-          new_version: ${{ env.new_version }}
 
       - name: UPDATE BREW / SCOOP
         run: |
@@ -196,8 +195,7 @@ jobs:
           cp ../dns-manager.json .
           cp ../CHANGELOG.md .
           git add .
-          git commit -m " ${{ steps.bump_version.outputs.new_version }}"
+          git commit -m " ${{ env.VERSION }}"
           git push
         env:
           GH_TOKEN: ${{ secrets.MO_CLI_TOKEN }}
-          new_version: ${{ env.new_version }}
