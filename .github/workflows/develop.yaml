@@ -56,8 +56,8 @@ jobs:
 
       - name: Create release in another repo
         run: |
-          echo "Creating release ${{ steps.release.outputs.release_created }}"
-          gh release create refs/tags/${{ steps.release.outputs.release_created }} --title "Release ${{ steps.release.outputs.release_created }}" --repo ruedigerp/homebrew-dns-manager
+          echo "Creating release ${ steps.release.outputs.release_created }"
+          gh release create refs/tags/${ steps.release.outputs.release_created } --title "Release ${ steps.release.outputs.release_created }" --repo ruedigerp/homebrew-dns-manager
         env:
           GH_TOKEN: ${{ secrets.MO_CLI_TOKEN }}
 
