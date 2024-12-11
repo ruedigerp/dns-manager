@@ -34,26 +34,41 @@ jobs:
       #     npx standard-version
       #     git push --follow-tags origin main
 
+      # - name: release-please 
+      #   uses: googleapis/release-please-action@v4
+      #   with:
+      #     # this assumes that you have created a personal access token
+      #     # (PAT) and configured it as a GitHub action secret named
+      #     # `MY_RELEASE_PLEASE_TOKEN` (this secret name is not important).
+      #     token: ${{ secrets.MO_CLI_TOKEN }}
+      #     # this is a built-in strategy in release-please, see "Action Inputs"
+      #     # for more options
+      #     release-type: simple 
+      #     target-branch: ${{ github.ref_name }}
+
+      # - name: Get the current version
+      #   id: get_version
+      #   run: echo "VERSION=$(git describe --tags $(git rev-list --tags --max-count=1))" >> $GITHUB_ENV
+
       - name: release-please 
         uses: googleapis/release-please-action@v4
+        id: release
         with:
-          # this assumes that you have created a personal access token
-          # (PAT) and configured it as a GitHub action secret named
-          # `MY_RELEASE_PLEASE_TOKEN` (this secret name is not important).
           token: ${{ secrets.MO_CLI_TOKEN }}
-          # this is a built-in strategy in release-please, see "Action Inputs"
-          # for more options
-          release-type: simple 
+          release-type: simple
           target-branch: ${{ github.ref_name }}
 
-      - name: Get the current version
-        id: get_version
-        run: echo "VERSION=$(git describe --tags $(git rev-list --tags --max-count=1))" >> $GITHUB_ENV
+      - name: Fetch latest tags
+        run: git fetch --tags
+      
+      - name: Get latest version tag
+        id: get_tag
+        run: echo "tag=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
 
       - name: Create release in another repo
         run: |
-          echo "Creating release ${VERSION}"
-          gh release create refs/tags/${VERSION} --title "Release ${VERSION}" --repo ruedigerp/homebrew-dns-manager
+          echo "Creating release ${tag}"
+          gh release create refs/tags/${tag} --title "Release ${tag}" --repo ruedigerp/homebrew-dns-manager
         env:
           GH_TOKEN: ${{ secrets.MO_CLI_TOKEN }}
 
@@ -85,9 +100,9 @@ jobs:
           ls -lisa builds
           for tarball in builds/*.tar.gz; do
             echo "Tarball: $tarball"
-            gh release upload "${{ env.VERSION }}" "$tarball" --repo ruedigerp/homebrew-dns-manager
+            gh release upload "${tag}" "$tarball" --repo ruedigerp/homebrew-dns-manager
           done
-          gh release upload "${{ env.VERSION }}" "builds/dns-manager-${{ env.VERSION }}-windows-amd64" --repo ruedigerp/homebrew-dns-manager
+          gh release upload "${tag}" "builds/dns-manager-${tag}-windows-amd64" --repo ruedigerp/homebrew-dns-manager
         env:
           GH_TOKEN: ${{ secrets.MO_CLI_TOKEN }}
 
@@ -103,7 +118,7 @@ jobs:
           cp ../dns-manager.json .
           cp ../CHANGELOG.md .
           git add .
-          git commit -m " ${{ env.VERSION }}"
+          git commit -m " ${tag}"
           git push
         env:
           GH_TOKEN: ${{ secrets.MO_CLI_TOKEN }}
