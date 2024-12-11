@@ -149,9 +149,9 @@ jobs:
           ls -lisa builds
           for tarball in builds/*.tar.gz; do
             echo "Tarball: $tarball"
-            gh release upload "${tag}" "$tarball" --repo ruedigerp/homebrew-dns-manager
+            gh release upload "${{ env.new_version }}" "$tarball" --repo ruedigerp/homebrew-dns-manager
           done
-          gh release upload "${tag}" "builds/dns-manager-${tag}-windows-amd64" --repo ruedigerp/homebrew-dns-manager
+          gh release upload "${{ env.new_version }}" "builds/dns-manager-${{ env.new_version }}-windows-amd64" --repo ruedigerp/homebrew-dns-manager
         env:
           GH_TOKEN: ${{ secrets.MO_CLI_TOKEN }}
 
@@ -167,7 +167,7 @@ jobs:
           cp ../dns-manager.json .
           cp ../CHANGELOG.md .
           git add .
-          git commit -m " ${tag}"
+          git commit -m " ${{ env.new_version }}"
           git push
         env:
           GH_TOKEN: ${{ secrets.MO_CLI_TOKEN }}
