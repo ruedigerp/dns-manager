@@ -57,11 +57,11 @@ jobs:
 
       - name: Create release in another repo
         run: |
-          echo "Creating release ${VERSION}"
+          echo "Creating release ${{ steps.release.outputs.version }}"
           gh release create refs/tags/${VERSION} --title "Release ${VERSION}" --repo ruedigerp/homebrew-dns-manager
         env:
           GH_TOKEN: ${{ secrets.MO_CLI_TOKEN }}
-          VERSION: ${{ steps.release.outputs.release_created }}
+          VERSION: ${{ steps.release.outputs.version }}
 
       - name: Execute make all
         run: make -f Makefile-dev all
@@ -77,9 +77,9 @@ jobs:
         run: |
           ls -lisa builds
           for tarball in builds/*.tar.gz; do
-            gh release upload "${{ env.VERSION }}" "$tarball" --repo ruedigerp/homebrew-dns-manager-dev
+            gh release upload "${{ steps.release.outputs.version }}" "$tarball" --repo ruedigerp/homebrew-dns-manager-dev
           done
-          gh release upload "${{ env.VERSION }}" "builds/dns-manager-dev-${{ env.VERSION }}-windows-amd64" --repo ruedigerp/homebrew-dns-manager-dev
+          gh release upload "${{ steps.release.outputs.version }}" "builds/dns-manager-dev-${{ steps.release.outputs.version }}-windows-amd64" --repo ruedigerp/homebrew-dns-manager-dev
         env:
           GH_TOKEN: ${{ secrets.MO_CLI_TOKEN }}
 
@@ -95,7 +95,7 @@ jobs:
           cp ../dns-manager-dev.json .
           cp ../CHANGELOG.md .
           git add .
-          git commit -m " ${{ env.VERSION }}"
+          git commit -m " ${{ steps.release.outputs.version }}"
           git push
         env:
           GH_TOKEN: ${{ secrets.MO_CLI_TOKEN }}
