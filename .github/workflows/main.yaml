@@ -95,11 +95,41 @@ jobs:
       - name: Bump version
         id: bump_version
         run: |
-          version=${tag/v/}  # Entfernt das 'v' vor der Version
+          # Neueste Commit-Nachricht abrufen
+          commit_message=$(git log -1 --pretty=%B)
+
+          # Alte Version ohne das 'v'
+          version=${tag/v/}
+
+          # Version in Major, Minor, Patch aufteilen
           IFS='.' read -r major minor patch <<< "$version"
-          patch=$((patch + 1))  # Erhöht die Patch-Version
+
+          # Basierend auf Commit-Nachricht die Version erhöhen
+          if [[ "$commit_message" == fix:* ]]; then
+            patch=$((patch + 1))  # Patch erhöhen
+          elif [[ "$commit_message" == feat:* ]]; then
+            minor=$((minor + 1))  # Minor erhöhen
+            patch=0  # Patch zurücksetzen
+          elif [[ "$commit_message" == chore:* ]]; then
+            major=$((major + 1))  # Major erhöhen
+            minor=0  # Minor zurücksetzen
+            patch=0  # Patch zurücksetzen
+          else
+            echo "No version bump for commit message: $commit_message"
+            exit 0
+          fi
+
+          # Neue Version erstellen
           new_version="v${major}.${minor}.${patch}"
           echo "new_version=$new_version" >> $GITHUB_ENV
+
+          echo "Bumped version based on commit message '$commit_message' to $new_version"
+
+          # version=${tag/v/}  # Entfernt das 'v' vor der Version
+          # IFS='.' read -r major minor patch <<< "$version"
+          # patch=$((patch + 1))  # Erhöht die Patch-Version
+          # new_version="v${major}.${minor}.${patch}"
+          # echo "new_version=$new_version" >> $GITHUB_ENV
 
       - name: Create new tag
         run: |
