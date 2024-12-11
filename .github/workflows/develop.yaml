@@ -30,27 +30,27 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.MO_CLI_TOKEN }}
 
-      - name: Install Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: "18"
+      # - name: Install Node.js
+      #   uses: actions/setup-node@v3
+      #   with:
+      #     node-version: "18"
 
-      - name: Install dependencies
-        run: npm install
+      # - name: Install dependencies
+      #   run: npm install
 
-      - name: Apply Changesets
-        id: changesets
-        run: |
-          # Bump the version and commit the changes
-          npx changeset version
-          # Push the changes back to the repo
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git push --follow-tags origin ${{ github.ref_name }}
+      # - name: Apply Changesets
+      #   id: changesets
+      #   run: |
+      #     # Bump the version and commit the changes
+      #     npx changeset version
+      #     # Push the changes back to the repo
+      #     git config user.name "github-actions[bot]"
+      #     git config user.email "github-actions[bot]@users.noreply.github.com"
+      #     git push --follow-tags origin ${{ github.ref_name }}
 
-      - name: Extract new version
-        id: get_version
-        run: echo "tag=$(node -p \"require('./package.json').version\")" >> $GITHUB_ENV
+      # - name: Extract new version
+      #   id: get_version
+      #   run: echo "tag=$(node -p \"require('./package.json').version\")" >> $GITHUB_ENV
       # - name: Create Sematic Release Version
       #   run: |
       #     git config --global user.email "ruediger@pretzlaff.info"
