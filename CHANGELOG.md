@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.29](https://github.com/ruedigerp/dns-manager/compare/v1.0.28...v1.0.29) (2024-12-11)
+
+
+### Bug Fixes
+
+* add -develop in dev branch ([9a7b0e8](https://github.com/ruedigerp/dns-manager/commit/9a7b0e86dee0425d1195228e9cf9e4081ae688ed))
+* change back to semvers ([5c9ffa9](https://github.com/ruedigerp/dns-manager/commit/5c9ffa9180e08b8c59eeaa0cc5a8205e16c5a389))
+* remove branch check ([bf10c2a](https://github.com/ruedigerp/dns-manager/commit/bf10c2a8e434589f6197c07a4092f072e655a7d6))
+* test dev action ([111b28d](https://github.com/ruedigerp/dns-manager/commit/111b28dfbae1baf8f5668b828950f1598086126b))
 
 ## [1.0.24](https://github.com/ruedigerp/dns-manager/compare/v1.0.23...v1.0.24) (2024-12-11)
 
