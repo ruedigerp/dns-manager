@@ -2,6 +2,7 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+
 ### [1.0.22](https://github.com/ruedigerp/dns-manager/compare/v1.0.21...v1.0.22) (2024-11-23)
 
 
@@ -14,7 +15,9 @@ All notable changes to this project will be documented in this file. See [standa
 ### [1.0.20](https://github.com/ruedigerp/dns-manager/compare/v1.0.19...v1.0.20) (2024-11-22)
 
 
+
 ### Bug Fixes
+
 
 * add comments to cloudflare records ([8580514](https://github.com/ruedigerp/dns-manager/commit/8580514c04f672e9ccc66d0fed9404a407575169))
 

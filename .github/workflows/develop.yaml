@@ -3,7 +3,11 @@ name: Build, Package, Release [dev]
 on:
   push:
     branches:
-      - delevop
+      - develop
+
+permissions:
+  contents: write
+  pull-requests: write
 
 jobs:
   build:
@@ -26,22 +30,41 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.MO_CLI_TOKEN }}
 
-      - name: Create Sematic Release Version
-        run: |
-          git config --global user.email "ruediger@pretzlaff.info"
-          git config --global user.name "ruedigerp"
-          git config --global credential.helper cache
-          npx standard-version --prerelease dev
-          git push --follow-tags origin delevop
+      # - name: Create Sematic Release Version
+      #   run: |
+      #     git config --global user.email "ruediger@pretzlaff.info"
+      #     git config --global user.name "ruedigerp"
+      #     git config --global credential.helper cache
+      #     npx standard-version --prerelease dev
+      #     git push --follow-tags origin delevop
 
-      - name: Get the current version
-        id: get_version
-        run: echo "VERSION=$(git describe --tags $(git rev-list --tags --max-count=1))" >> $GITHUB_ENV
+      - name: release-please 
+        uses: googleapis/release-please-action@v4
+        id: release
+        with:
+          token: ${{ secrets.MO_CLI_TOKEN }}
+          release-type: simple
+          target-branch: ${{ github.ref_name }}
+
+      - name: Fetch latest tags
+        run: git fetch --tags
+      
+      - name: Get latest version tag
+        id: get_tag
+        run: echo "tag=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
+
+      # - name: Debug Outputs
+      #   run: | 
+      #     echo "Outputs: ${{ toJson(steps.release.outputs) }}"
+
+      # - name: Get the current version
+      #   id: get_version
+      #   run: echo "VERSION=$(git describe --tags $(git rev-list --tags --max-count=1))" >> $GITHUB_ENV
 
       - name: Create release in another repo
         run: |
-          echo "Creating release ${VERSION}"
-          gh release create refs/tags/${VERSION} --title "Release ${VERSION}" --repo ruedigerp/homebrew-dns-manager
+          echo "Creating release ${tag}"
+          gh release create refs/tags/${tag} --title "Release ${tag}" --repo ruedigerp/homebrew-dns-manager
         env:
           GH_TOKEN: ${{ secrets.MO_CLI_TOKEN }}
 
@@ -59,9 +82,9 @@ jobs:
         run: |
           ls -lisa builds
           for tarball in builds/*.tar.gz; do
-            gh release upload "${{ env.VERSION }}" "$tarball" --repo ruedigerp/homebrew-dns-manager-dev
+            gh release upload "${tag}" "$tarball" --repo ruedigerp/homebrew-dns-manager-dev
           done
-          gh release upload "${{ env.VERSION }}" "builds/dns-manager-dev-${{ env.VERSION }}-windows-amd64" --repo ruedigerp/homebrew-dns-manager-dev
+          gh release upload "${tag}" "builds/dns-manager-dev-${tag}-windows-amd64" --repo ruedigerp/homebrew-dns-manager-dev
         env:
           GH_TOKEN: ${{ secrets.MO_CLI_TOKEN }}
 
@@ -77,7 +100,7 @@ jobs:
           cp ../dns-manager-dev.json .
           cp ../CHANGELOG.md .
           git add .
-          git commit -m " ${{ env.VERSION }}"
+          git commit -m " ${tag}"
           git push
         env:
           GH_TOKEN: ${{ secrets.MO_CLI_TOKEN }}
