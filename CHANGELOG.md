@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
 
+## [1.0.24](https://github.com/ruedigerp/dns-manager/compare/v1.0.23...v1.0.24) (2024-12-11)
+
+
+### Bug Fixes
+
+* 9 ([33f54e1](https://github.com/ruedigerp/dns-manager/commit/33f54e13615938b19e8b0d7c3a42cb5d0dc46cf8))
+* change to please-release ([6a002c7](https://github.com/ruedigerp/dns-manager/commit/6a002c7c27b401c3ae5e009792904a51854e8f0b))
+* please-relase 10 ([2a3f535](https://github.com/ruedigerp/dns-manager/commit/2a3f535b9430189894c3f3b8ce42179a2bb25ad7))
+* please-relase 5 ([2b2b260](https://github.com/ruedigerp/dns-manager/commit/2b2b26039f84f43033943f29fbc651f007eef44d))
+* please-release 4 ([38df26c](https://github.com/ruedigerp/dns-manager/commit/38df26c412c324b6ba1eb11a2c150bb1d1dfe870))
+* please-release 7 ([b319164](https://github.com/ruedigerp/dns-manager/commit/b31916472ef249c1bba8b86c8ef723e5d14a2304))
+* please-release 8 ([edf989a](https://github.com/ruedigerp/dns-manager/commit/edf989a070fb83dee6c3fd4cd1e480acbec9822f))
+* release-please 6 ([03456a7](https://github.com/ruedigerp/dns-manager/commit/03456a7d5c4354c1a2057bd4071e78c852b5ce06))
+
+
+### Miscellaneous Chores
+
+* release 1.0.24 ([2ef4f79](https://github.com/ruedigerp/dns-manager/commit/2ef4f79a2d9d6424e8b09e34ed968c1d056173c3))
+
 ### [1.0.22](https://github.com/ruedigerp/dns-manager/compare/v1.0.21...v1.0.22) (2024-11-23)
 
 
