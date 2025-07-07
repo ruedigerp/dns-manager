@@ -1,9 +1,14 @@
-name: Build, Package, Release
+name: Build, Package, Release [dev]
 
 on:
   push:
     branches:
       - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
 
 jobs:
   build:
@@ -24,146 +29,110 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.MO_CLI_TOKEN }}
+          password: ${{ secrets.PACKAGE_PAT }}
 
-      - name: Create Sematic Release Version
+      - name: Get latest tag
+        id: get_tag
         run: |
-          git config --global user.email "ruediger@pretzlaff.info"
-          git config --global user.name "dns-manager"
-          git config --global credential.helper cache
-          npx standard-version
-          git push --follow-tags origin main
-
-      - name: release-please 
-        uses: googleapis/release-please-action@v4
-        with:
-          # this assumes that you have created a personal access token
-          # (PAT) and configured it as a GitHub action secret named
-          # `MY_RELEASE_PLEASE_TOKEN` (this secret name is not important).
-          token: ${{ secrets.MO_CLI_TOKEN }}
-          # this is a built-in strategy in release-please, see "Action Inputs"
-          # for more options
-          release-type: simple 
-          target-branch: ${{ github.ref_name }}
-
-      - name: Get the current version
-        id: get_version
-        run: echo "VERSION=$(git describe --tags $(git rev-list --tags --max-count=1))" >> $GITHUB_ENV
-
-      # - name: release-please 
-      #   uses: googleapis/release-please-action@v4
-      #   id: release
-      #   with:
-      #     token: ${{ secrets.MO_CLI_TOKEN }}
-      #     release-type: simple
-      #     target-branch: ${{ github.ref_name }}
-
-      # - name: Fetch latest tags
-      #   run: git fetch --tags
-      
-      # - name: Get latest version tag
-      #   id: get_tag
-      #   # run: echo "tag=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
-      #   run: echo "tag=$(git describe --tags $(git rev-list --tags --max-count=1))" >> $GITHUB_ENV
-
-      # - name: Install Node.js
-      #   uses: actions/setup-node@v3
-      #   with:
-      #     node-version: "18"
-
-      # - name: Install dependencies
-      #   run: npm install
-
-      # - name: Apply Changesets
-      #   id: changesets
+          echo "current tag=$(git describe --tags --abbrev=0)" 
+          echo "tag=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
+  
+      # - name: Get latest tag and bump version
+      #   id: get_and_bump
       #   run: |
-      #     # Bump the version and commit the changes
-      #     npx changeset version
-      #     # Push the changes back to the repo
-      #     git config user.name "github-actions[bot]"
-      #     git config user.email "github-actions[bot]@users.noreply.github.com"
-      #     git push --follow-tags origin ${{ github.ref_name }}
-
-      # - name: Extract new version
-      #   id: get_version
-      #   run: echo "tag=$(node -p \"require('./package.json').version\")" >> $GITHUB_ENV
-
-      # - name: Get latest tag
-      #   id: get_tag
-      #   run: |
-      #     echo "tag=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
-      #     echo "Tag: ${{ env.tag }}"
-
-      # - name: Bump version
-      #   id: bump_version
-      #   run: |
-      #     # Neueste Commit-Nachricht abrufen
+      #     # Aktuellen Tag abrufen
+      #     current_tag=$(git describe --tags --abbrev=0)
+      #     echo "Current tag: $current_tag"
+          
+      #     # Commit-Nachricht abrufen
       #     commit_message=$(git log -1 --pretty=%B)
-      #     # Alte Version ohne das 'v'
-      #     version=${tag/v/}
-      #     # Version in Major, Minor, Patch aufteilen
+      #     echo "Commit message: $commit_message"
+          
+      #     # Version ohne 'v' extrahieren
+      #     version=${current_tag/v/}
+      #     echo "Current version: $version"
+          
+      #     # Version in Komponenten aufteilen
       #     IFS='.' read -r major minor patch <<< "$version"
-      #     # Basierend auf Commit-Nachricht die Version erhöhen
+      #     echo "Parsed: major=$major, minor=$minor, patch=$patch"
+          
+      #     # Version basierend auf Commit-Message erhöhen
       #     if [[ "$commit_message" == fix:* ]]; then
-      #       patch=$((patch + 1))  # Patch erhöhen
+      #       patch=$((patch + 1))
+      #       echo "Bumping patch version"
       #     elif [[ "$commit_message" == feat:* ]]; then
-      #       minor=$((minor + 1))  # Minor erhöhen
-      #       patch=0  # Patch zurücksetzen
+      #       minor=$((minor + 1))
+      #       patch=0
+      #       echo "Bumping minor version"
       #     elif [[ "$commit_message" == chore:* ]]; then
-      #       major=$((major + 1))  # Major erhöhen
-      #       minor=0  # Minor zurücksetzen
-      #       patch=0  # Patch zurücksetzen
+      #       major=$((major + 1))
+      #       minor=0
+      #       patch=0
+      #       echo "Bumping major version"
       #     else
       #       echo "No version bump for commit message: $commit_message"
       #       exit 0
       #     fi
+          
       #     # Neue Version erstellen
       #     new_version="v${major}.${minor}.${patch}"
-      #     # Prüfen, ob der aktuelle Branch 'develop' ist
-    
-      #     # branch_name=$(echo "${GITHUB_REF##*/}")
-      #     # if [[ "$branch_name" == "develop" ]]; then
-      #     #   new_version="${new_version}-develop"
-      #     # fi
+      #     echo "New version: $new_version"
       #     echo "new_version=$new_version" >> $GITHUB_ENV
-      #     echo "::set-output name=new_version::$new_version"
 
-      # - name: Create new tag
-      #   run: |
-      #     git config user.name "github-actions[bot]"
-      #     git config user.email "github-actions[bot]@users.noreply.github.com"
-      #     git tag ${{ env.new_version }}
-      #     git push origin ${{ env.new_version }}
-
-      # - name: Create release in another repo
-      #   run: |
-      #     gh release create ${{ env.new_version }} --title "Release ${{ env.new_version }}" --repo ruedigerp/homebrew-dns-manager
-      #   env:
-      #     GH_TOKEN: ${{ secrets.MO_CLI_TOKEN }}
-      #     new_version: ${{ env.new_version }}
+      - name: Bump version
+        id: bump_version
+        run: |
+          # Neueste Commit-Nachricht abrufen
+          commit_message=$(git log -1 --pretty=%B)
+          echo "Commit message: $commit_message"
+          
+          # Alte Version ohne das 'v' - KORREKTE Bash-Syntax für env variable
+          version=${tag/v/}
+          echo "Current version: $version"
+          
+          # Version in Major, Minor, Patch aufteilen
+          IFS='.' read -r major minor patch <<< "$version"
+          echo "Parsed: major=$major, minor=$minor, patch=$patch"
+          
+          # Basierend auf Commit-Nachricht die Version erhöhen
+          if [[ "$commit_message" == fix:* ]]; then
+            patch=$((patch + 1))
+            echo "Bumping patch version"
+          elif [[ "$commit_message" == feat:* ]]; then
+            minor=$((minor + 1))
+            patch=0
+            echo "Bumping minor version"
+          elif [[ "$commit_message" == chore:* ]]; then
+            major=$((major + 1))
+            minor=0
+            patch=0
+            echo "Bumping major version"
+          else
+            echo "No version bump for commit message: $commit_message"
+            exit 0
+          fi
+          
+          # Neue Version erstellen
+          new_version="v${major}.${minor}.${patch}"
+          echo "New version: $new_version"
+          echo "new_version=$new_version" >> $GITHUB_ENV
+          
+      - name: Create new tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag ${{ env.new_version }}
+          git push origin ${{ env.new_version }}
 
       - name: Create release in another repo
         run: |
-          echo "Creating release ${VERSION}"
-          gh release create refs/tags/${VERSION} --title "Release ${VERSION}" --repo ruedigerp/homebrew-dns-manager
+          echo "Creating release ${{ env.new_version }}"
+          gh release create refs/tags/${{ env.new_version }} --title "Release ${{ env.new_version }}" --repo ruedigerp/homebrew-dns-manager
         env:
-          GH_TOKEN: ${{ secrets.MO_CLI_TOKEN }}
-
-      - name: Initialize Go dependencies
-        run: go mod tidy
-          
-      # - name: Cache Go modules
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: |
-      #       ~/.cache/go-build
-      #       ~/go/pkg/mod
-      #     key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-go-
+          GH_TOKEN: ${{ secrets.FG_PAT_HOMEBREW_2025 }}
 
       - name: Execute make all
-        run: make all
+        run: make -f Makefile-dev all
 
       - name: Package artefacts
         run: |
@@ -172,30 +141,29 @@ jobs:
           done
           ls -lisa builds
 
-      - name: Upload tarballs/executable
+      - name: Upload tarballs/executables
         run: |
           ls -lisa builds
           for tarball in builds/*.tar.gz; do
-            echo "Tarball: $tarball"
-            gh release upload "${{ env.VERSION }}" "$tarball" --repo ruedigerp/homebrew-dns-manager
+            gh release upload "${{ env.new_version }}" "$tarball" --repo ruedigerp/homebrew-dns-manager
           done
-          gh release upload "${{ env.VERSION }}" "builds/dns-manager-${{ env.VERSION }}-windows-amd64" --repo ruedigerp/homebrew-dns-manager
+          gh release upload "${{ env.new_version }}" "builds/dns-manager-${{ env.new_version }}-windows-amd64" --repo ruedigerp/homebrew-dns-manager
         env:
-          GH_TOKEN: ${{ secrets.MO_CLI_TOKEN }}
+          GH_TOKEN: ${{ secrets.FG_PAT_HOMEBREW_2025 }}
 
-      - name: UPDATE BREW / SCOOP
+      - name: Update Homebrew & Scoop
         run: |
           ./release.sh
           git config --global user.email "ruediger@pretzlaff.info"
-          git config --global user.name "dns-manager"
+          git config --global user.name "ruedigerp"
           git config --global credential.helper cache
-          git clone https://${{secrets.MO_CLI_TOKEN}}@github.com/ruedigerp/homebrew-dns-manager
+          git clone https://${{secrets.FG_PAT_HOMEBREW_2025}}@github.com/ruedigerp/homebrew-dns-manager
           cd homebrew-dns-manager
           cp ../dns-manager.rb .
           cp ../dns-manager.json .
           cp ../CHANGELOG.md .
           git add .
-          git commit -m " ${{ env.VERSION }}"
+          git commit -m " ${{ env.new_version }}"  # Hier war noch ${tag}
           git push
         env:
-          GH_TOKEN: ${{ secrets.MO_CLI_TOKEN }}
+          GH_TOKEN: ${{ secrets.FG_PAT_HOMEBREW_2025 }}
