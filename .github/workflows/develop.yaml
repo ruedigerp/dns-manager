@@ -14,69 +14,57 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Setup Go
-        uses: actions/setup-go@v5.0.0
-        with:
-          go-version: "1.21"
-
-      - name: Checkout repository
-        uses: actions/checkout@v4.1.6
-        with:
-          fetch-depth: 0
-
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.PACKAGE_PAT }}
-
-      - name: Get latest tag
-        id: get_tag
-        run: 
-          echo "current tag=$(git describe --tags --abbrev=0)" 
-          echo "tag=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
-  
-      - name: Bump version
-        id: bump_version
-        run: |
-          # Neueste Commit-Nachricht abrufen
-          commit_message=$(git log -1 --pretty=%B)
-          # Alte Version ohne das 'v'
-          version=${tag/v/}
-          # Version in Major, Minor, Patch aufteilen
-          IFS='.' read -r major minor patch <<< "$version"
-          # Basierend auf Commit-Nachricht die Version erhöhen
-          if [[ "$commit_message" == fix:* ]]; then
-            patch=$((patch + 1))  # Patch erhöhen
-          elif [[ "$commit_message" == feat:* ]]; then
-            minor=$((minor + 1))  # Minor erhöhen
-            patch=0  # Patch zurücksetzen
-          elif [[ "$commit_message" == chore:* ]]; then
-            major=$((major + 1))  # Major erhöhen
-            minor=0  # Minor zurücksetzen
-            patch=0  # Patch zurücksetzen
-          else
-            echo "No version bump for commit message: $commit_message"
-            exit 0
-          fi
-          # Neue Version erstellen
-          new_version="v${major}.${minor}.${patch}"
-          # Prüfen, ob der aktuelle Branch 'develop' ist
+    - name: Get latest tag
+      id: get_tag
+      run: |
+        current_tag=$(git describe --tags --abbrev=0)
+        echo "current tag=$current_tag"
+        echo "tag=$current_tag" >> $GITHUB_ENV
     
-          # branch_name=$(echo "${GITHUB_REF##*/}")
-          # if [[ "$branch_name" == "develop" ]]; then
-          #   new_version="${new_version}-develop"
-          # fi
-          echo "new_version=$new_version" >> $GITHUB_ENV
-          echo "::set-output name=new_version::$new_version"
-  
-      - name: Create new tag
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git tag ${{ env.new_version }}
-          git push origin ${{ env.new_version }}
+    - name: Bump version
+      id: bump_version
+      run: |
+        # Neueste Commit-Nachricht abrufen
+        commit_message=$(git log -1 --pretty=%B)
+        echo "Commit message: $commit_message"
+        
+        # Alte Version ohne das 'v'
+        version=${tag/v/}
+        echo "Current version: $version"
+        
+        # Version in Major, Minor, Patch aufteilen
+        IFS='.' read -r major minor patch <<< "$version"
+        echo "Parsed version: major=$major, minor=$minor, patch=$patch"
+        
+        # Basierend auf Commit-Nachricht die Version erhöhen
+        if [[ "$commit_message" == fix:* ]]; then
+          patch=$((patch + 1))  # Patch erhöhen
+          echo "Bumping patch version"
+        elif [[ "$commit_message" == feat:* ]]; then
+          minor=$((minor + 1))  # Minor erhöhen
+          patch=0  # Patch zurücksetzen
+          echo "Bumping minor version"
+        elif [[ "$commit_message" == chore:* ]]; then
+          major=$((major + 1))  # Major erhöhen
+          minor=0  # Minor zurücksetzen
+          patch=0  # Patch zurücksetzen
+          echo "Bumping major version"
+        else
+          echo "No version bump for commit message: $commit_message"
+          exit 0
+        fi
+        
+        # Neue Version erstellen
+        new_version="v${major}.${minor}.${patch}"
+        echo "New version: $new_version"
+        echo "new_version=$new_version" >> $GITHUB_ENV
+    
+    - name: Create new tag
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git tag ${{ env.new_version }}
+        git push origin ${{ env.new_version }}
 
       - name: Create release in another repo
         run: |
