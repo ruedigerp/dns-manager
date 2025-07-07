@@ -44,9 +44,8 @@ jobs:
           commit_message=$(git log -1 --pretty=%B)
           echo "Commit message: $commit_message"
           
-          # Alte Version ohne das 'v' - KORREKTE Referenz auf env.tag
-          version=${{ env.tag }}
-          version=${version/v/}
+          # Alte Version ohne das 'v' - KORREKTE Bash-Syntax für env variable
+          version=${tag/v/}
           echo "Current version: $version"
           
           # Version in Major, Minor, Patch aufteilen
@@ -122,7 +121,7 @@ jobs:
           cp ../dns-manager-dev.json .
           cp ../CHANGELOG.md .
           git add .
-          git commit -m " ${tag}"
+          git commit -m " ${{ env.new_version }}"  # Hier war noch ${tag}
           git push
         env:
           GH_TOKEN: ${{ secrets.FG_PAT_HOMEBREW_2025 }}
