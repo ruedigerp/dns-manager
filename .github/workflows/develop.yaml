@@ -29,7 +29,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.MO_CLI_TOKEN }}
+          password: ${{ secrets.PACKAGE_PAT }}
 
       - name: Get latest tag
         id: get_tag
@@ -83,7 +83,7 @@ jobs:
           echo "Creating release ${tag}"
           gh release create refs/tags/${tag} --title "Release ${tag}" --repo ruedigerp/homebrew-dns-manager
         env:
-          GH_TOKEN: ${{ secrets.MO_CLI_TOKEN }}
+          GH_TOKEN: ${{ secrets.FG_PAT_HOMEBREW_2025 }}
 
       - name: Execute make all
         run: make -f Makefile-dev all
@@ -103,7 +103,7 @@ jobs:
           done
           gh release upload "${tag}" "builds/dns-manager-dev-${tag}-windows-amd64" --repo ruedigerp/homebrew-dns-manager-dev
         env:
-          GH_TOKEN: ${{ secrets.MO_CLI_TOKEN }}
+          GH_TOKEN: ${{ secrets.FG_PAT_HOMEBREW_2025 }}
 
       - name: Update Homebrew & Scoop
         run: |
@@ -111,7 +111,7 @@ jobs:
           git config --global user.email "ruediger@pretzlaff.info"
           git config --global user.name "ruedigerp"
           git config --global credential.helper cache
-          git clone https://${{secrets.MO_CLI_TOKEN}}@github.com/ruedigerp/homebrew-dns-manager-dev
+          git clone https://${{secrets.FG_PAT_HOMEBREW_2025}}@github.com/ruedigerp/homebrew-dns-manager-dev
           cd homebrew-dns-manager-dev
           cp ../dns-manager-dev.rb .
           cp ../dns-manager-dev.json .
@@ -120,4 +120,4 @@ jobs:
           git commit -m " ${tag}"
           git push
         env:
-          GH_TOKEN: ${{ secrets.MO_CLI_TOKEN }}
+          GH_TOKEN: ${{ secrets.FG_PAT_HOMEBREW_2025 }}
