@@ -33,10 +33,52 @@ jobs:
 
       - name: Get latest tag
         id: get_tag
-        run: 
+        run: |
           echo "current tag=$(git describe --tags --abbrev=0)" 
           echo "tag=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
   
+      # - name: Get latest tag and bump version
+      #   id: get_and_bump
+      #   run: |
+      #     # Aktuellen Tag abrufen
+      #     current_tag=$(git describe --tags --abbrev=0)
+      #     echo "Current tag: $current_tag"
+          
+      #     # Commit-Nachricht abrufen
+      #     commit_message=$(git log -1 --pretty=%B)
+      #     echo "Commit message: $commit_message"
+          
+      #     # Version ohne 'v' extrahieren
+      #     version=${current_tag/v/}
+      #     echo "Current version: $version"
+          
+      #     # Version in Komponenten aufteilen
+      #     IFS='.' read -r major minor patch <<< "$version"
+      #     echo "Parsed: major=$major, minor=$minor, patch=$patch"
+          
+      #     # Version basierend auf Commit-Message erhöhen
+      #     if [[ "$commit_message" == fix:* ]]; then
+      #       patch=$((patch + 1))
+      #       echo "Bumping patch version"
+      #     elif [[ "$commit_message" == feat:* ]]; then
+      #       minor=$((minor + 1))
+      #       patch=0
+      #       echo "Bumping minor version"
+      #     elif [[ "$commit_message" == chore:* ]]; then
+      #       major=$((major + 1))
+      #       minor=0
+      #       patch=0
+      #       echo "Bumping major version"
+      #     else
+      #       echo "No version bump for commit message: $commit_message"
+      #       exit 0
+      #     fi
+          
+      #     # Neue Version erstellen
+      #     new_version="v${major}.${minor}.${patch}"
+      #     echo "New version: $new_version"
+      #     echo "new_version=$new_version" >> $GITHUB_ENV
+
       - name: Bump version
         id: bump_version
         run: |
