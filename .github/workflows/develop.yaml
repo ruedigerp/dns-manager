@@ -66,46 +66,46 @@ jobs:
         git tag ${{ env.new_version }}
         git push origin ${{ env.new_version }}
 
-      - name: Create release in another repo
-        run: |
-          echo "Creating release ${tag}"
-          gh release create refs/tags/${tag} --title "Release ${tag}" --repo ruedigerp/homebrew-dns-manager
-        env:
-          GH_TOKEN: ${{ secrets.FG_PAT_HOMEBREW_2025 }}
+    - name: Create release in another repo
+      run: |
+        echo "Creating release ${tag}"
+        gh release create refs/tags/${tag} --title "Release ${tag}" --repo ruedigerp/homebrew-dns-manager
+      env:
+        GH_TOKEN: ${{ secrets.FG_PAT_HOMEBREW_2025 }}
 
-      - name: Execute make all
-        run: make -f Makefile-dev all
+    - name: Execute make all
+      run: make -f Makefile-dev all
 
-      - name: Package artefacts
-        run: |
-          for file in builds/*; do
-            tar -czvf builds/$(basename "$file").tar.gz -C builds $(basename "$file")
-          done
-          ls -lisa builds
+    - name: Package artefacts
+      run: |
+        for file in builds/*; do
+          tar -czvf builds/$(basename "$file").tar.gz -C builds $(basename "$file")
+        done
+        ls -lisa builds
 
-      - name: Upload tarballs/executables
-        run: |
-          ls -lisa builds
-          for tarball in builds/*.tar.gz; do
-            gh release upload "${tag}" "$tarball" --repo ruedigerp/homebrew-dns-manager-dev
-          done
-          gh release upload "${tag}" "builds/dns-manager-dev-${tag}-windows-amd64" --repo ruedigerp/homebrew-dns-manager-dev
-        env:
-          GH_TOKEN: ${{ secrets.FG_PAT_HOMEBREW_2025 }}
+    - name: Upload tarballs/executables
+      run: |
+        ls -lisa builds
+        for tarball in builds/*.tar.gz; do
+          gh release upload "${tag}" "$tarball" --repo ruedigerp/homebrew-dns-manager-dev
+        done
+        gh release upload "${tag}" "builds/dns-manager-dev-${tag}-windows-amd64" --repo ruedigerp/homebrew-dns-manager-dev
+      env:
+        GH_TOKEN: ${{ secrets.FG_PAT_HOMEBREW_2025 }}
 
-      - name: Update Homebrew & Scoop
-        run: |
-          ./release-dev.sh
-          git config --global user.email "ruediger@pretzlaff.info"
-          git config --global user.name "ruedigerp"
-          git config --global credential.helper cache
-          git clone https://${{secrets.FG_PAT_HOMEBREW_2025}}@github.com/ruedigerp/homebrew-dns-manager-dev
-          cd homebrew-dns-manager-dev
-          cp ../dns-manager-dev.rb .
-          cp ../dns-manager-dev.json .
-          cp ../CHANGELOG.md .
-          git add .
-          git commit -m " ${tag}"
-          git push
-        env:
-          GH_TOKEN: ${{ secrets.FG_PAT_HOMEBREW_2025 }}
+    - name: Update Homebrew & Scoop
+      run: |
+        ./release-dev.sh
+        git config --global user.email "ruediger@pretzlaff.info"
+        git config --global user.name "ruedigerp"
+        git config --global credential.helper cache
+        git clone https://${{secrets.FG_PAT_HOMEBREW_2025}}@github.com/ruedigerp/homebrew-dns-manager-dev
+        cd homebrew-dns-manager-dev
+        cp ../dns-manager-dev.rb .
+        cp ../dns-manager-dev.json .
+        cp ../CHANGELOG.md .
+        git add .
+        git commit -m " ${tag}"
+        git push
+      env:
+        GH_TOKEN: ${{ secrets.FG_PAT_HOMEBREW_2025 }}
