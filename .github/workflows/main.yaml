@@ -1,9 +1,14 @@
-name: Build, Package, Release
+name: Build, Package, Release [dev]
 
 on:
   push:
     branches:
       - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
 
 jobs:
   build:
@@ -26,42 +31,108 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.PACKAGE_PAT }}
 
-      - name: Create Sematic Release Version
+      - name: Get latest tag
+        id: get_tag
         run: |
-          git config --global user.email "ruediger@pretzlaff.info"
-          git config --global user.name "dns-manager"
-          git config --global credential.helper cache
-          npx standard-version
-          git push --follow-tags origin main
+          echo "current tag=$(git describe --tags --abbrev=0)" 
+          echo "tag=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
+  
+      # - name: Get latest tag and bump version
+      #   id: get_and_bump
+      #   run: |
+      #     # Aktuellen Tag abrufen
+      #     current_tag=$(git describe --tags --abbrev=0)
+      #     echo "Current tag: $current_tag"
+          
+      #     # Commit-Nachricht abrufen
+      #     commit_message=$(git log -1 --pretty=%B)
+      #     echo "Commit message: $commit_message"
+          
+      #     # Version ohne 'v' extrahieren
+      #     version=${current_tag/v/}
+      #     echo "Current version: $version"
+          
+      #     # Version in Komponenten aufteilen
+      #     IFS='.' read -r major minor patch <<< "$version"
+      #     echo "Parsed: major=$major, minor=$minor, patch=$patch"
+          
+      #     # Version basierend auf Commit-Message erhöhen
+      #     if [[ "$commit_message" == fix:* ]]; then
+      #       patch=$((patch + 1))
+      #       echo "Bumping patch version"
+      #     elif [[ "$commit_message" == feat:* ]]; then
+      #       minor=$((minor + 1))
+      #       patch=0
+      #       echo "Bumping minor version"
+      #     elif [[ "$commit_message" == chore:* ]]; then
+      #       major=$((major + 1))
+      #       minor=0
+      #       patch=0
+      #       echo "Bumping major version"
+      #     else
+      #       echo "No version bump for commit message: $commit_message"
+      #       exit 0
+      #     fi
+          
+      #     # Neue Version erstellen
+      #     new_version="v${major}.${minor}.${patch}"
+      #     echo "New version: $new_version"
+      #     echo "new_version=$new_version" >> $GITHUB_ENV
 
-      - name: release-please 
-        uses: googleapis/release-please-action@v4
-        with:
-          # this assumes that you have created a personal access token
-          # (PAT) and configured it as a GitHub action secret named
-          # `MY_RELEASE_PLEASE_TOKEN` (this secret name is not important).
-          token: ${{ secrets.FG_PAT_HOMEBREW_2025 }}
-          # this is a built-in strategy in release-please, see "Action Inputs"
-          # for more options
-          release-type: simple 
-          target-branch: ${{ github.ref_name }}
-
-      - name: Get the current version
-        id: get_version
-        run: echo "VERSION=$(git describe --tags $(git rev-list --tags --max-count=1))" >> $GITHUB_ENV
+      - name: Bump version
+        id: bump_version
+        run: |
+          # Neueste Commit-Nachricht abrufen
+          commit_message=$(git log -1 --pretty=%B)
+          echo "Commit message: $commit_message"
+          
+          # Alte Version ohne das 'v' - KORREKTE Bash-Syntax für env variable
+          version=${tag/v/}
+          echo "Current version: $version"
+          
+          # Version in Major, Minor, Patch aufteilen
+          IFS='.' read -r major minor patch <<< "$version"
+          echo "Parsed: major=$major, minor=$minor, patch=$patch"
+          
+          # Basierend auf Commit-Nachricht die Version erhöhen
+          if [[ "$commit_message" == fix:* ]]; then
+            patch=$((patch + 1))
+            echo "Bumping patch version"
+          elif [[ "$commit_message" == feat:* ]]; then
+            minor=$((minor + 1))
+            patch=0
+            echo "Bumping minor version"
+          elif [[ "$commit_message" == chore:* ]]; then
+            major=$((major + 1))
+            minor=0
+            patch=0
+            echo "Bumping major version"
+          else
+            echo "No version bump for commit message: $commit_message"
+            exit 0
+          fi
+          
+          # Neue Version erstellen
+          new_version="v${major}.${minor}.${patch}"
+          echo "New version: $new_version"
+          echo "new_version=$new_version" >> $GITHUB_ENV
+          
+      - name: Create new tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag ${{ env.new_version }}
+          git push origin ${{ env.new_version }}
 
       - name: Create release in another repo
         run: |
-          echo "Creating release ${VERSION}"
-          gh release create refs/tags/${VERSION} --title "Release ${VERSION}" --repo ruedigerp/homebrew-dns-manager
+          echo "Creating release ${{ env.new_version }}"
+          gh release create refs/tags/${{ env.new_version }} --title "Release ${{ env.new_version }}" --repo ruedigerp/homebrew-dns-manager
         env:
           GH_TOKEN: ${{ secrets.FG_PAT_HOMEBREW_2025 }}
 
-      - name: Initialize Go dependencies
-        run: go mod tidy
-
       - name: Execute make all
-        run: make all
+        run: make -f Makefile-dev all
 
       - name: Package artefacts
         run: |
@@ -70,22 +141,21 @@ jobs:
           done
           ls -lisa builds
 
-      - name: Upload tarballs/executable
+      - name: Upload tarballs/executables
         run: |
           ls -lisa builds
           for tarball in builds/*.tar.gz; do
-            echo "Tarball: $tarball"
-            gh release upload "${{ env.VERSION }}" "$tarball" --repo ruedigerp/homebrew-dns-manager
+            gh release upload "${{ env.new_version }}" "$tarball" --repo ruedigerp/homebrew-dns-manager
           done
-          gh release upload "${{ env.VERSION }}" "builds/dns-manager-${{ env.VERSION }}-windows-amd64" --repo ruedigerp/homebrew-dns-manager
+          gh release upload "${{ env.new_version }}" "builds/dns-manager-${{ env.new_version }}-windows-amd64" --repo ruedigerp/homebrew-dns-manager
         env:
           GH_TOKEN: ${{ secrets.FG_PAT_HOMEBREW_2025 }}
 
-      - name: UPDATE BREW / SCOOP
+      - name: Update Homebrew & Scoop
         run: |
           ./release.sh
           git config --global user.email "ruediger@pretzlaff.info"
-          git config --global user.name "dns-manager"
+          git config --global user.name "ruedigerp"
           git config --global credential.helper cache
           git clone https://${{secrets.FG_PAT_HOMEBREW_2025}}@github.com/ruedigerp/homebrew-dns-manager
           cd homebrew-dns-manager
@@ -93,7 +163,7 @@ jobs:
           cp ../dns-manager.json .
           cp ../CHANGELOG.md .
           git add .
-          git commit -m " ${{ env.VERSION }}"
+          git commit -m " ${{ env.new_version }}"  # Hier war noch ${tag}
           git push
         env:
           GH_TOKEN: ${{ secrets.FG_PAT_HOMEBREW_2025 }}
