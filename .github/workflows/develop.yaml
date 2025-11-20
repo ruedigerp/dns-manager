@@ -29,7 +29,8 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.PACKAGE_PAT }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          # password: ${{ secrets.PACKAGE_PAT }}
 
       - name: Get latest tag
         id: get_tag
@@ -129,7 +130,8 @@ jobs:
           echo "Creating release ${{ env.new_version }}"
           gh release create refs/tags/${{ env.new_version }} --title "Release ${{ env.new_version }}" --repo ruedigerp/homebrew-dns-manager
         env:
-          GH_TOKEN: ${{ secrets.FG_PAT_HOMEBREW_2025 }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # GH_TOKEN: ${{ secrets.FG_PAT_HOMEBREW_2025 }}
 
       - name: Execute make all
         run: make -f Makefile-dev all
@@ -149,7 +151,8 @@ jobs:
           done
           gh release upload "${{ env.new_version }}" "builds/dns-manager-dev-${{ env.new_version }}-windows-amd64" --repo ruedigerp/homebrew-dns-manager-dev
         env:
-          GH_TOKEN: ${{ secrets.FG_PAT_HOMEBREW_2025 }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # GH_TOKEN: ${{ secrets.FG_PAT_HOMEBREW_2025 }}
 
       - name: Update Homebrew & Scoop
         run: |
@@ -166,4 +169,5 @@ jobs:
           git commit -m " ${{ env.new_version }}"  # Hier war noch ${tag}
           git push
         env:
-          GH_TOKEN: ${{ secrets.FG_PAT_HOMEBREW_2025 }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # GH_TOKEN: ${{ secrets.FG_PAT_HOMEBREW_2025 }}
