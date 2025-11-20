@@ -124,12 +124,21 @@ jobs:
           git tag ${{ env.new_version }}
           git push origin ${{ env.new_version }}
 
-      - name: Create release in another repo
+
+      - name: Creating release
         run: |
-          echo "Creating release ${{ env.new_version }}"
-          gh release create refs/tags/${{ env.new_version }} --title "Release ${{ env.new_version }}" --repo ruedigerp/homebrew-dns-manager
+          echo "Creating release ${{ env.tag }}"
+          gh release create ${{ env.tag }} --title "Release ${{ env.tag }}" --repo ruedigerp/homebrew-dns-manager
         env:
+          tag: v1.0.29
           GH_TOKEN: ${{ secrets.FG_PAT_HOMEBREW_2025 }}
+
+      # - name: Create release in another repo
+      #   run: |
+      #     echo "Creating release ${{ env.new_version }}"
+      #     gh release create refs/tags/${{ env.new_version }} --title "Release ${{ env.new_version }}" --repo ruedigerp/homebrew-dns-manager
+      #   env:
+      #     GH_TOKEN: ${{ secrets.FG_PAT_HOMEBREW_2025 }}
 
       - name: Execute make all
         run: make -f Makefile-dev all
