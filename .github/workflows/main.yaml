@@ -1,4 +1,4 @@
-name: Build, Package, Release [dev]
+name: Build, Package, Release [prod]
 
 on:
   push:
@@ -29,7 +29,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.PACKAGE_PAT }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get latest tag
         id: get_tag
