@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.25](https://github.com/ruedigerp/dns-manager/compare/v1.0.24...v1.0.25) (2024-12-11)
+
+
+### Bug Fixes
+
+* add -develop in dev branch ([9a7b0e8](https://github.com/ruedigerp/dns-manager/commit/9a7b0e86dee0425d1195228e9cf9e4081ae688ed))
+* add fix, feat, core ([dd06fe4](https://github.com/ruedigerp/dns-manager/commit/dd06fe4ba4548ce925c8533095459ee734468fa8))
+* add new_version: ${{ env.new_version }} ([f549b79](https://github.com/ruedigerp/dns-manager/commit/f549b79b8224a29d0b6497937752de2ff7e12b83))
+* bump version ([860e08c](https://github.com/ruedigerp/dns-manager/commit/860e08cdf66dd59f6495962e5f9b9578542e24b3))
+* change back to semvers ([5c9ffa9](https://github.com/ruedigerp/dns-manager/commit/5c9ffa9180e08b8c59eeaa0cc5a8205e16c5a389))
+* changeset to main build ([d0acaed](https://github.com/ruedigerp/dns-manager/commit/d0acaed826b9459c3e338b424466373113f49530))
+* disable build cache ([307f3ba](https://github.com/ruedigerp/dns-manager/commit/307f3ba497d6e4f326cc440396894131bfb32d03))
+* new_version env ([e2e754d](https://github.com/ruedigerp/dns-manager/commit/e2e754d98eed8f584df6ea4e6c4dec650109a5a7))
+* remove branch check ([bf10c2a](https://github.com/ruedigerp/dns-manager/commit/bf10c2a8e434589f6197c07a4092f072e655a7d6))
+* remove output ([9eb5e60](https://github.com/ruedigerp/dns-manager/commit/9eb5e600d0463a4592de765e4e081c2528616ed2))
+* test ([0ba1f95](https://github.com/ruedigerp/dns-manager/commit/0ba1f951c2f8caa9f6d30da4fa2c0ea4ac731956))
+* test 13 ([c449422](https://github.com/ruedigerp/dns-manager/commit/c4494227fcf59c3ae340a14d0cd1ef6979bc5dbb))
+* test changeset ([f89928c](https://github.com/ruedigerp/dns-manager/commit/f89928c3188915d9ddb840c851fde95df2c9d202))
+* test dev action ([111b28d](https://github.com/ruedigerp/dns-manager/commit/111b28dfbae1baf8f5668b828950f1598086126b))
+* test tag ([62871ca](https://github.com/ruedigerp/dns-manager/commit/62871cabf4fe3240f8b2bfab028f126c36d807d3))
+* version ([c6a981e](https://github.com/ruedigerp/dns-manager/commit/c6a981edb34fdc5d3387403a6a12678a37ff9cd5))
+* version output ([ca45302](https://github.com/ruedigerp/dns-manager/commit/ca453020aa758414cf4fe70fd0cfc85a4aa32ebc))
+
 ### [1.0.30](https://github.com/ruedigerp/dns-manager/compare/v1.0.29...v1.0.30) (2024-12-11)
 
 
