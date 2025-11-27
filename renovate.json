@@ -1,0 +1,53 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "dependencyDashboard": true,
+  "extends": [
+    "config:recommended"
+  ],
+  "postUpdateOptions": ["gomodTidy", "gomodUpdateImportPaths"],
+  "rebaseWhen": "conflicted",
+  "forkProcessing": "enabled",
+  "prBodyNotes": [
+    "Before merging updates:",
+    "",
+    "- check for new features",
+    "- check if the update breaks anything",
+    ""
+  ],
+  "packageRules": [
+    {
+      "matchManagers": ["pip_requirements", "pip_setup", "pipenv", "poetry"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "Python Minor/Patch"
+    },
+    {
+      "matchManagers": ["pip_requirements", "pip_setup", "pipenv", "poetry"],
+      "matchUpdateTypes": ["major"],
+      "groupName": "Python Major Updates"
+    },
+    {
+      "matchManagers": ["gomod"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "Go Minor/Patch"
+    },
+    {
+      "matchManagers": ["gomod"],
+      "matchUpdateTypes": ["major"],
+      "groupName": "Go Major Updates"
+    },
+    {
+      "matchManagers": ["dockerfile", "docker-compose"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "Docker Minor/Patch"
+    },
+    {
+      "matchManagers": ["dockerfile", "docker-compose"],
+      "matchUpdateTypes": ["major"],
+      "groupName": "Docker Major Updates"
+    },
+    {
+      "matchManagers": ["github-actions"],
+      "groupName": "GitHub Actions"
+    }
+  ]
+}
