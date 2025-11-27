@@ -5,7 +5,7 @@ go 1.23.0
 require (
 	github.com/miekg/dns v1.1.68
 	github.com/spf13/cobra v1.10.1
-	gopkg.in/yaml.v2 v2.4.0
+	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
