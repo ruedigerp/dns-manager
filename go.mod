@@ -5,7 +5,7 @@ go 1.24.0
 toolchain go1.25.6
 
 require (
-	github.com/miekg/dns v1.1.70
+	github.com/miekg/dns v1.1.72
 	github.com/spf13/cobra v1.10.2
 	gopkg.in/yaml.v3 v3.0.1
 )
